@@ -6,12 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import bank.app.domain.Account;
 import bank.app.service.BankSession;
-import bank.app.service.LoginService;
-import bank.app.ui.console.ConsoleReader;
+import bank.app.service.AccountService;
 
-public class ConsoleLoginService {
-    private @Autowired ConsoleReader input;
-    private @Autowired LoginService loginService;
+public class ConsoleLoginService extends AbstractConsoleService {
+    private @Autowired AccountService loginService;
     private @Autowired BankSession session;
 
     public void login() {

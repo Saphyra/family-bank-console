@@ -4,12 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import bank.app.ui.UserInterface;
 import bank.app.ui.console.menu.Menu;
+import bank.app.ui.console.menu.Option;
 
 public class ConsoleUserInterface implements UserInterface {
-    private @Autowired Menu mainMenu;
+    private @Autowired Menu<String, String> mainMenu;
 
     @Override
     public void run() {
-        mainMenu.interactUser();
+        mainMenu.interactUser(Option.defaultExitOption());
     }
 }

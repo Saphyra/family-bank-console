@@ -12,18 +12,18 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bank.app.Application;
 import bank.app.dao.AccountDao;
+import bank.app.service.AccountService;
 import bank.app.service.BankSession;
-import bank.app.service.LoginService;
-import bank.app.service.NewMemberService;
+import bank.app.service.NewAccountService;
 import bank.app.ui.UserInterface;
 import bank.app.ui.console.ConsoleReader;
 import bank.app.ui.console.ConsoleUserInterface;
-import bank.app.ui.console.NewMemberCreator;
 import bank.app.ui.console.menu.Menu;
 import bank.app.ui.console.menu.impl.AccountMenu;
 import bank.app.ui.console.menu.impl.MainMenu;
 import bank.app.ui.console.uiservice.ConsoleLoginService;
-import bank.app.ui.console.uiservice.ConsoleNewMemberCreator;
+import bank.app.ui.console.uiservice.ConsoleNewMemberService;
+import bank.app.ui.console.uiservice.ConsoleRequestService;
 
 @Configuration
 @EnableTransactionManagement
@@ -47,21 +47,21 @@ public class AppConfig {
     }
 
     @Bean
-    public Menu mainMenu() {
+    public Menu<String, String> mainMenu() {
         System.out.println("MainMenu bean created");
         return new MainMenu(input());
     }
 
     @Bean
-    Menu accountMenu() {
+    Menu<String, String> accountMenu() {
         System.out.println("AccountMenu bean created");
         return new AccountMenu();
     }
 
     @Bean
-    public NewMemberCreator newMemberCreator() {
-        System.out.println("NewMemberCreator bean created");
-        return new ConsoleNewMemberCreator();
+    public ConsoleNewMemberService consoleNewMemberService() {
+        System.out.println("ConsoleNewMemberService bean created");
+        return new ConsoleNewMemberService();
     }
 
     @Bean
@@ -71,9 +71,15 @@ public class AppConfig {
     }
 
     @Bean
-    public NewMemberService newMemberService() {
+    public ConsoleRequestService consoleRequestSercice() {
+        System.out.println("ConsoleRequestService bean created");
+        return new ConsoleRequestService();
+    }
+
+    @Bean
+    public NewAccountService newMemberService() {
         System.out.println("NewMemberService bean created");
-        return new NewMemberService();
+        return new NewAccountService();
     }
 
     @Bean
@@ -83,9 +89,9 @@ public class AppConfig {
     }
 
     @Bean
-    public LoginService loginService() {
-        System.out.println("LoginService bean created");
-        return new LoginService();
+    public AccountService loginService() {
+        System.out.println("AccountService bean created");
+        return new AccountService();
     }
 
     @Bean
@@ -115,5 +121,4 @@ public class AppConfig {
         System.out.println("petpp Bean created");
         return proc;
     }
-
 }

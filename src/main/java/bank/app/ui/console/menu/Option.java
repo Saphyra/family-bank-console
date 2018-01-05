@@ -28,12 +28,8 @@ public class Option<Key, Value> {
         return new Option<String, String>(BACK_KEY, "Logout");
     }
 
-    public static Option<String, String> optionFactory(String key, String value) {
-        return new Option<String, String>(key, value);
-    }
-
-    public static Option<String, String> optionFactory(int key, String value) {
-        return optionFactory(Integer.toString(key), value);
+    public static <KeyType, OptionType> Option<KeyType, OptionType> optionFactory(KeyType key, OptionType value) {
+        return new Option<KeyType, OptionType>(key, value);
     }
 
     public Key getKey() {

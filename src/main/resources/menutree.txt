@@ -1,3 +1,6 @@
 Menu
-2 login
 3 bank administration
+
+rename account
+change password
+delete account

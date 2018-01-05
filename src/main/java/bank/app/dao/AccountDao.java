@@ -1,6 +1,9 @@
 package bank.app.dao;
 
+import java.util.List;
+
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import bank.app.domain.Account;
 
@@ -29,5 +32,13 @@ public class AccountDao extends AbstractDao {
         long count = (long) query.getSingleResult();
 
         return !Long.valueOf(count).equals(Long.valueOf(0L));
+    }
+
+    public List<Account> getAllAccounts() {
+        String sql = "SELECT a FROM Account a";
+        TypedQuery<Account> query = entityManager.createQuery(sql, Account.class);
+        List<Account> result = query.getResultList();
+
+        return result;
     }
 }

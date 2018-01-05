@@ -3,15 +3,11 @@ package bank.app.ui.console.uiservice;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import bank.app.domain.Account;
-import bank.app.service.NewMemberService;
-import bank.app.ui.console.ConsoleReader;
-import bank.app.ui.console.NewMemberCreator;
+import bank.app.service.NewAccountService;
 
-public class ConsoleNewMemberCreator implements NewMemberCreator {
-    private @Autowired ConsoleReader input;
-    private @Autowired NewMemberService service;
+public class ConsoleNewMemberService extends AbstractConsoleService {
+    private @Autowired NewAccountService service;
 
-    @Override
     public void createNewMember() {
         Account newAccount = new Account();
         newAccount.setName(input.getUserInput("Username:"));

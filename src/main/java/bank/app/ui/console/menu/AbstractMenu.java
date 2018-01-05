@@ -2,19 +2,19 @@ package bank.app.ui.console.menu;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.TreeMap;
 
 import bank.app.ui.console.ConsoleReader;
 
-public abstract class AbstractMenu implements Menu {
+public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyType>, OptionType> implements Menu<KeyType, OptionType> {
     protected final ConsoleReader input;
 
-    private List<String> messages = new ArrayList<>();
-    private Map<String, Option<String, String>> options = new HashMap<>();
+    private List<MessageType> messages = new ArrayList<>();
+    private Map<KeyType, Option<KeyType, OptionType>> options = new TreeMap<>();
     private String menuHeader = "Options:";
     private String menuFooter = "Choose your option: ";
 
@@ -28,11 +28,11 @@ public abstract class AbstractMenu implements Menu {
 
     protected abstract void setDisplayedMessages();
 
-    protected void addMessage(String message) {
+    protected void addMessage(MessageType message) {
         messages.add(message);
     }
 
-    protected void addOption(Option<String, String> content) {
+    protected void addOption(Option<KeyType, OptionType> content) {
         options.put(content.getKey(), content);
     }
 
@@ -52,18 +52,13 @@ public abstract class AbstractMenu implements Menu {
         this.menuFooter = menuFooter;
     }
 
-    protected abstract void enterMenu(Option<String, String> selection);
+    protected abstract void enterMenu(Option<KeyType, OptionType> selection);
 
     @Override
-    public void interactUser() {
-        interactUser(Option.defaultExitOption());
-    }
-
-    @Override
-    public void interactUser(Option<String, String> exitOption) {
+    public void interactUser(Option<KeyType, OptionType> exitOption) {
         beforeStart();
         setDisplayedMessages();
-        Option<String, String> selection = null;
+        Option<KeyType, OptionType> selection = null;
         do {
             selection = doInteract();
             if (!isExit(exitOption, selection)) {
@@ -76,9 +71,9 @@ public abstract class AbstractMenu implements Menu {
     protected void beforeStart() {
     }
 
-    protected Option<String, String> doInteract() {
+    protected Option<KeyType, OptionType> doInteract() {
         printMenu();
-        Option<String, String> selection = null;
+        Option<KeyType, OptionType> selection = null;
         do {
             try {
                 selection = getUserSelection();
@@ -96,7 +91,7 @@ public abstract class AbstractMenu implements Menu {
 
     private void printMessages() {
         System.out.println("\n");
-        for (String message : messages) {
+        for (MessageType message : messages) {
             System.out.println(message.toString());
         }
         System.out.println("");
@@ -104,18 +99,18 @@ public abstract class AbstractMenu implements Menu {
 
     private void printOptions() {
         System.out.println(menuHeader);
-        Set<String> keys = options.keySet();
-        for (String key : keys) {
-            Option<String, String> content = options.get(key);
+        Set<KeyType> keys = options.keySet();
+        for (KeyType key : keys) {
+            Option<KeyType, OptionType> content = options.get(key);
             System.out.println("[" + key + "] - " + content.toString());
         }
         System.out.println();
     }
 
-    protected Option<String, String> getUserSelection() throws NoSuchElementException {
-        Option<String, String> result = null;
+    protected Option<KeyType, OptionType> getUserSelection() throws NoSuchElementException {
+        Option<KeyType, OptionType> result = null;
 
-        String key = input.getUserInput(menuFooter);
+        KeyType key = getKey();
         validateKey(key);
         result = options.get(key);
 
@@ -124,13 +119,28 @@ public abstract class AbstractMenu implements Menu {
         return result;
     }
 
-    private void validateKey(String key) {
+    private KeyType getKey() {
+        KeyType key = null;
+        try {
+            String userInput = input.getUserInput(menuFooter);
+            key = convertInputToKey(userInput);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            key = getKey();
+        }
+        return key;
+    }
+
+    protected abstract KeyType convertInputToKey(String userInput) throws Exception;
+
+    private void validateKey(KeyType key) {
+
         if (!options.containsKey(key)) {
             throw new NoSuchElementException("Invalid user input.");
         }
     }
 
-    private boolean isExit(Option<String, String> exitOption, Option<String, String> selection) {
+    private boolean isExit(Option<KeyType, OptionType> exitOption, Option<KeyType, OptionType> selection) {
         return selection.getKey().equals(exitOption.getKey());
     }
 
