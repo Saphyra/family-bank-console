@@ -61,6 +61,7 @@ public abstract class AbstractMenu implements Menu {
 
     @Override
     public void interactUser(Option<String, String> exitOption) {
+        beforeStart();
         setDisplayedMessages();
         Option<String, String> selection = null;
         do {
@@ -69,6 +70,10 @@ public abstract class AbstractMenu implements Menu {
                 enterMenu(selection);
             }
         } while (!isExit(exitOption, selection));
+        afterExit();
+    }
+
+    protected void beforeStart() {
     }
 
     protected Option<String, String> doInteract() {
@@ -127,5 +132,8 @@ public abstract class AbstractMenu implements Menu {
 
     private boolean isExit(Option<String, String> exitOption, Option<String, String> selection) {
         return selection.getKey().equals(exitOption.getKey());
+    }
+
+    protected void afterExit() {
     }
 }

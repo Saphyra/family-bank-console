@@ -12,13 +12,17 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bank.app.Application;
 import bank.app.dao.AccountDao;
+import bank.app.service.BankSession;
+import bank.app.service.LoginService;
 import bank.app.service.NewMemberService;
 import bank.app.ui.UserInterface;
 import bank.app.ui.console.ConsoleReader;
 import bank.app.ui.console.ConsoleUserInterface;
 import bank.app.ui.console.NewMemberCreator;
 import bank.app.ui.console.menu.Menu;
+import bank.app.ui.console.menu.impl.AccountMenu;
 import bank.app.ui.console.menu.impl.MainMenu;
+import bank.app.ui.console.uiservice.ConsoleLoginService;
 import bank.app.ui.console.uiservice.ConsoleNewMemberCreator;
 
 @Configuration
@@ -49,15 +53,39 @@ public class AppConfig {
     }
 
     @Bean
+    Menu accountMenu() {
+        System.out.println("AccountMenu bean created");
+        return new AccountMenu();
+    }
+
+    @Bean
     public NewMemberCreator newMemberCreator() {
         System.out.println("NewMemberCreator bean created");
         return new ConsoleNewMemberCreator();
     }
 
     @Bean
+    public ConsoleLoginService consoleLoginService() {
+        System.out.println("ConsoleLoginService bean created");
+        return new ConsoleLoginService();
+    }
+
+    @Bean
     public NewMemberService newMemberService() {
         System.out.println("NewMemberService bean created");
         return new NewMemberService();
+    }
+
+    @Bean
+    public BankSession bankSession() {
+        System.out.println("BankSession bean created");
+        return new BankSession();
+    }
+
+    @Bean
+    public LoginService loginService() {
+        System.out.println("LoginService bean created");
+        return new LoginService();
     }
 
     @Bean

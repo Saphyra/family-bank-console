@@ -2,7 +2,7 @@ package bank.app.ui.console.menu;
 
 public class Option<Key, Value> {
     public static final String EXIT_KEY = "0";
-    public static final String BACK_KEY = "1";
+    public static final String BACK_KEY = "0";
 
     private final Key key;
     private final Value value;
@@ -22,6 +22,10 @@ public class Option<Key, Value> {
 
     public static Option<String, String> defaultCancelOption() {
         return new Option<String, String>(BACK_KEY, "Cancel");
+    }
+
+    public static Option<String, String> defaultLogoutOption() {
+        return new Option<String, String>(BACK_KEY, "Logout");
     }
 
     public static Option<String, String> optionFactory(String key, String value) {

@@ -1,17 +1,3 @@
 Menu
 2 login
 3 bank administration
- 
-
-login
-0 back
-username
-password
-
-Account
-0 back
-1 view requests
-2 new request
-3 view account data
-4 view transactions
-5 new transaction

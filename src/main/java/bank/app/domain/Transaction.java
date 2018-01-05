@@ -1,6 +1,8 @@
 package bank.app.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -13,6 +15,7 @@ public class Transaction {
     private int fromId;
     private int toId;
     private int money;
+    private @Enumerated(EnumType.STRING) TransactionType type;
 
     public int getId() {
         return id;
