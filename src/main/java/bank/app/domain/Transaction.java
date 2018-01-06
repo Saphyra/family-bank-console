@@ -10,17 +10,19 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import bank.app.util.DateFormat;
+
 @Entity
 public class Transaction {
 
     @Id
     @GeneratedValue
     private int id;
-    private int fromId;
-    private int toId;
+    private String fromName;
+    private String addresseeName;
     private int money;
     private @Enumerated(EnumType.STRING) TransactionType type;
-    private @Temporal(TemporalType.DATE) Date date;
+    private @Temporal(TemporalType.TIMESTAMP) Date date;
 
     public int getId() {
         return id;
@@ -30,20 +32,20 @@ public class Transaction {
         this.id = id;
     }
 
-    public int getFromId() {
-        return fromId;
+    public String getFromName() {
+        return fromName;
     }
 
-    public void setFromId(int fromId) {
-        this.fromId = fromId;
+    public void setFromName(String fromName) {
+        this.fromName = fromName;
     }
 
-    public int getToId() {
-        return toId;
+    public String getAddresseeName() {
+        return addresseeName;
     }
 
-    public void setToId(int toId) {
-        this.toId = toId;
+    public void setAddresseeName(String addresseeName) {
+        this.addresseeName = addresseeName;
     }
 
     public int getMoney() {
@@ -68,5 +70,15 @@ public class Transaction {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getTransactionInfo() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("From: ").append(fromName)//
+                .append(" - To: ").append(addresseeName)//
+                .append(" - Money: ").append(money)//
+                .append(" - Type: ").append(type)//
+                .append(" - Time: ").append(DateFormat.formatDate(date));
+        return builder.toString();
     }
 }

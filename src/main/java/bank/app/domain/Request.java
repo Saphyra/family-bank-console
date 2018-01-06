@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import bank.app.util.DateFormat;
+
 @Entity
 public class Request {
     private static final String DEFAULT_MESSAGE = "No message";
@@ -118,17 +120,16 @@ public class Request {
     }
 
     public String getRequestInfo() {
-        // TODO write dates
         StringBuilder builder = new StringBuilder();
         builder.append("From: ").append(fromName)//
                 .append(" - To: ").append(addresseeName)//
                 .append(" - Money: ").append(money)//
                 .append(" - Request message: ").append(requestMessage)//
-                .append(" - Sent: ").append("Date")//
+                .append(" - Sent: ").append(DateFormat.formatDate(sendDate))//
                 .append(" - Status: ").append(status);
-        if (status != RequestStatus.SENT && status != RequestStatus.PENDING) {
+        if (status != RequestStatus.SENT && status != RequestStatus.PENDING && status != RequestStatus.CANCELLED) {
             builder.append(" - Answer message: ").append(answerMessage)//
-                    .append(" - Answered: ").append("Date");
+                    .append(" - Answered: ").append(DateFormat.formatDate(answerDate));
         }
         return builder.toString();
     }

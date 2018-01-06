@@ -16,17 +16,20 @@ public class ConsoleRequestService extends AbstractConsoleService {
     private @Autowired AccountService accountService;
     private @Autowired RequestService requestService;
 
-    // TODO refactor: extract methods
     public void createNewRequest() {
         NewRequestCreator creator = new NewRequestCreator(input, accountService);
         Account account = session.getActualAccount();
         Request request = creator.createRequest(account);
 
         if (request != null) {
-            requestService.saveRequest(request);
-            System.out.println("Request sent.");
-            System.out.println(request.getRequestInfo());
+            sendRequest(request);
         }
+    }
+
+    private void sendRequest(Request request) {
+        requestService.saveRequest(request);
+        System.out.println("Request sent.");
+        System.out.println(request.getRequestInfo());
     }
 
     public void viewNewRequests() {
@@ -59,12 +62,7 @@ public class ConsoleRequestService extends AbstractConsoleService {
     public void viewPendingRequests() {
         Account actualAccount = session.getActualAccount();
         String name = actualAccount.getName();
-        List<Request> requests = requestService.getPendingRequestsByFromName(name);
-
-        System.err.println("\nThe following requests are waiting for answer:");
-        for (Request request : requests) {
-            // TODO cancel pending requests
-            System.out.println(request.getRequestInfo());
-        }
+        PendingRequestMenu pendingRequestMenu = new PendingRequestMenu(input, requestService, name);
+        pendingRequestMenu.interactUser();
     }
 }

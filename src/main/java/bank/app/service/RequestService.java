@@ -48,4 +48,10 @@ public class RequestService extends AbstractService {
     public List<Request> getPendingRequestsByFromName(String fromName) {
         return requestDao.getPendingRequestsByFromName(fromName);
     }
+
+    @Transactional
+    public void cancelRequest(int requestId) {
+        Request request = requestDao.findById(requestId);
+        request.setStatus(RequestStatus.CANCELLED);
+    }
 }

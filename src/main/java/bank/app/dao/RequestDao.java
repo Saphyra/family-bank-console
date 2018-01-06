@@ -42,4 +42,8 @@ public class RequestDao extends AbstractDao {
         query.setParameter("pendingStatus", RequestStatus.PENDING);
         return query.getResultList();
     }
+
+    public Request findById(int id) {
+        return entityManager.find(Request.class, id);
+    }
 }

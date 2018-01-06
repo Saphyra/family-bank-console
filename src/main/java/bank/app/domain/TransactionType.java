@@ -1,5 +1,5 @@
 package bank.app.domain;
 
 public enum TransactionType {
-    GET, SEND, DEPOST, WITHDRAW
+    REQUEST, SEND, DEPOST, WITHDRAW
 }

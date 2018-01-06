@@ -52,9 +52,13 @@ public class NewRequestCreator {
         idGetterMenu.interactUser();
     }
 
-    // TODO refactor: accounts from method parameter
     private List<Option<Integer, String>> getAddressees(int accountId) {
         List<Account> accounts = accountService.getAllAccounts();
+        List<Option<Integer, String>> result = getAddressees(accountId, accounts);
+        return result;
+    }
+
+    private List<Option<Integer, String>> getAddressees(int accountId, List<Account> accounts) {
         List<Option<Integer, String>> result = new ArrayList<>();
 
         for (Account account : accounts) {
@@ -66,21 +70,17 @@ public class NewRequestCreator {
         return result;
     }
 
-    // TODO refactor: extract methods
     private double getMoney() {
         double money;
         String userInput = input.getUserInput("How much money do you want to request? (Enter 0 if you want to cancel the request.");
         try {
             money = Double.valueOf(userInput);
-        } catch (NumberFormatException e) {
-            System.err.println("Type a number!");
-            money = getMoney();
-        }
-
-        try {
             if (money < 0) {
                 throw new IllegalArgumentException("Type a number higher than 0 or 0 to cancell request!");
             }
+        } catch (NumberFormatException e) {
+            System.err.println("Type a number!");
+            money = getMoney();
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             money = getMoney();

@@ -32,8 +32,16 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
         messages.add(message);
     }
 
+    protected void clearMessages() {
+        messages.clear();
+    }
+
     protected void addOption(Option<KeyType, OptionType> content) {
         options.put(content.getKey(), content);
+    }
+
+    protected void clearOptions() {
+        options.clear();
     }
 
     public String getMenuHeader() {
@@ -61,15 +69,34 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
         setDisplayedMessages();
         Option<KeyType, OptionType> selection = null;
         do {
+            beforeSelection();
             selection = doInteract();
+            afterSelection();
             if (!isExit(exitOption, selection)) {
+                beforeEnterMenu();
                 enterMenu(selection);
+                afterEnterMenu();
             }
         } while (!isExit(exitOption, selection));
         afterExit();
     }
 
     protected void beforeStart() {
+    }
+
+    protected void beforeSelection() {
+    }
+
+    protected void afterSelection() {
+    }
+
+    protected void beforeEnterMenu() {
+    }
+
+    protected void afterEnterMenu() {
+    }
+
+    protected void afterExit() {
     }
 
     // TODO refactor: extract methods
@@ -144,8 +171,5 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
 
     private boolean isExit(Option<KeyType, OptionType> exitOption, Option<KeyType, OptionType> selection) {
         return selection.getKey().equals(exitOption.getKey());
-    }
-
-    protected void afterExit() {
     }
 }

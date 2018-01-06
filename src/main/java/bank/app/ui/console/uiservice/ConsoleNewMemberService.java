@@ -23,18 +23,15 @@ public class ConsoleNewMemberService extends AbstractConsoleService {
         }
     }
 
-    // TODO refactor: else ifs
     private boolean isAccountValid(Account newAccount) {
         boolean result = true;
         if (newAccount.getName().isEmpty()) {
             System.err.println("Invalid account name.");
             result = false;
-        }
-        if (newAccount.getPassword().isEmpty()) {
+        } else if (newAccount.getPassword().isEmpty()) {
             System.err.println("Invalid password.");
             result = false;
-        }
-        if (service.isUsernameRegistered(newAccount)) {
+        } else if (service.isUsernameRegistered(newAccount)) {
             System.err.println("Account is already registered with the given name");
             result = false;
         }
