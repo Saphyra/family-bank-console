@@ -55,6 +55,7 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
     protected abstract void enterMenu(Option<KeyType, OptionType> selection);
 
     @Override
+    // TODO refactor: extract methods
     public void interactUser(Option<KeyType, OptionType> exitOption) {
         beforeStart();
         setDisplayedMessages();
@@ -71,6 +72,7 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
     protected void beforeStart() {
     }
 
+    // TODO refactor: extract methods
     protected Option<KeyType, OptionType> doInteract() {
         printMenu();
         Option<KeyType, OptionType> selection = null;
@@ -97,6 +99,7 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
         System.out.println("");
     }
 
+    // TODO refactor: extract methods
     private void printOptions() {
         System.out.println(menuHeader);
         Set<KeyType> keys = options.keySet();
@@ -134,7 +137,6 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
     protected abstract KeyType convertInputToKey(String userInput) throws Exception;
 
     private void validateKey(KeyType key) {
-
         if (!options.containsKey(key)) {
             throw new NoSuchElementException("Invalid user input.");
         }

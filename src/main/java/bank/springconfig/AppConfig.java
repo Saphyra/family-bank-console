@@ -12,9 +12,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bank.app.Application;
 import bank.app.dao.AccountDao;
+import bank.app.dao.RequestDao;
 import bank.app.service.AccountService;
 import bank.app.service.BankSession;
 import bank.app.service.NewAccountService;
+import bank.app.service.RequestService;
 import bank.app.ui.UserInterface;
 import bank.app.ui.console.ConsoleReader;
 import bank.app.ui.console.ConsoleUserInterface;
@@ -28,6 +30,8 @@ import bank.app.ui.console.uiservice.ConsoleRequestService;
 @Configuration
 @EnableTransactionManagement
 public class AppConfig {
+
+    // APPLICATION
     @Bean
     public Application app() {
         System.out.println("Application bean created");
@@ -40,6 +44,7 @@ public class AppConfig {
         return new ConsoleUserInterface();
     }
 
+    // CONSOLE UI
     @Bean
     public ConsoleReader input() {
         System.out.println("Input bean created");
@@ -76,6 +81,7 @@ public class AppConfig {
         return new ConsoleRequestService();
     }
 
+    // SERVICE
     @Bean
     public NewAccountService newMemberService() {
         System.out.println("NewMemberService bean created");
@@ -95,11 +101,25 @@ public class AppConfig {
     }
 
     @Bean
+    public RequestService requestService() {
+        System.out.println("RequestService bean created");
+        return new RequestService();
+    }
+
+    // DAO
+    @Bean
     public AccountDao memberDao() {
         System.out.println("AccountDao bean crated");
         return new AccountDao();
     }
 
+    @Bean
+    public RequestDao requestDao() {
+        System.out.println("RequestDao bean created");
+        return new RequestDao();
+    }
+
+    // DB CONNECTION
     @Bean
     public LocalEntityManagerFactoryBean entityManagerFactory() {
         LocalEntityManagerFactoryBean emf = new LocalEntityManagerFactoryBean();

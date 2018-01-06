@@ -5,8 +5,8 @@ import javax.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import bank.app.domain.Account;
-import bank.app.service.BankSession;
 import bank.app.service.AccountService;
+import bank.app.service.BankSession;
 
 public class ConsoleLoginService extends AbstractConsoleService {
     private @Autowired AccountService loginService;
@@ -20,6 +20,7 @@ public class ConsoleLoginService extends AbstractConsoleService {
         }
     }
 
+    // TODO refactor: extract methods
     private Account getAccount() {
         Account result = null;
         System.out.println("Logging in... Send empty string to cancel process.");

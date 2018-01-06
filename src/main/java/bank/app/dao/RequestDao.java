@@ -1,5 +1,9 @@
 package bank.app.dao;
 
-public class RequestDao extends AbstractDao {
+import bank.app.domain.Request;
 
+public class RequestDao extends AbstractDao {
+    public void save(Request request) {
+        entityManager.persist(request);
+    }
 }

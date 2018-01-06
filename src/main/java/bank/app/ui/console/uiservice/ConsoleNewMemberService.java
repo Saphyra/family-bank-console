@@ -8,6 +8,7 @@ import bank.app.service.NewAccountService;
 public class ConsoleNewMemberService extends AbstractConsoleService {
     private @Autowired NewAccountService service;
 
+    // TODO refactor: extract methods
     public void createNewMember() {
         Account newAccount = new Account();
         newAccount.setName(input.getUserInput("Username:"));
@@ -22,6 +23,7 @@ public class ConsoleNewMemberService extends AbstractConsoleService {
         }
     }
 
+    // TODO refactor: else ifs
     private boolean isAccountValid(Account newAccount) {
         boolean result = true;
         if (newAccount.getName().isEmpty()) {

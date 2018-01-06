@@ -12,7 +12,7 @@ public class AccountMenu extends AbstractMenu<String, String, String> {
     private static final String VIEW_ACCOUNT_DATA_OPTION = "5";
     private static final String NEW_TRANSACTION_OPTION = "4";
     private static final String VIEW_TRANSACTIONS_OPTION = "3";
-    private static final String NEW_REQUEST_OPTION = "2";
+    private static final String NEW_REQUESTS_OPTION = "2";
     private static final String VIEW_REQUEST_OPTION = "1";
     private @Autowired BankSession session;
     private @Autowired ConsoleRequestService request;
@@ -24,7 +24,7 @@ public class AccountMenu extends AbstractMenu<String, String, String> {
         setMenuHeader("What do you want to do?");
         addOption(Option.defaultLogoutOption());
         addOption(Option.optionFactory(VIEW_REQUEST_OPTION, "Wiew requests"));
-        addOption(Option.optionFactory(NEW_REQUEST_OPTION, "New requests"));
+        addOption(Option.optionFactory(NEW_REQUESTS_OPTION, "New requests"));
         addOption(Option.optionFactory(VIEW_TRANSACTIONS_OPTION, "Wiew transactions"));
         addOption(Option.optionFactory(NEW_TRANSACTION_OPTION, "New transactions"));
         addOption(Option.optionFactory(VIEW_ACCOUNT_DATA_OPTION, "Wiew account data"));
@@ -34,13 +34,14 @@ public class AccountMenu extends AbstractMenu<String, String, String> {
     @Override
     protected void enterMenu(Option<String, String> selection) {
         switch (selection.getKey()) {
-        case NEW_REQUEST_OPTION:
+        case NEW_REQUESTS_OPTION:
             request.createNewRequest();
             break;
         case VIEW_ACCOUNT_DATA_OPTION:
             printAccountData();
             break;
         }
+        // TODO implement menu points
     }
 
     @Override
@@ -57,6 +58,7 @@ public class AccountMenu extends AbstractMenu<String, String, String> {
         account = null;
     }
 
+    // TODO refactor: Responsibility to account
     private void printAccountData() {
         StringBuilder builder = new StringBuilder();
         builder.append("Account name: ").append(account.getName()).append(System.lineSeparator())//
