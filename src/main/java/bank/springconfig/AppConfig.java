@@ -25,7 +25,7 @@ import bank.app.ui.console.menu.impl.AccountMenu;
 import bank.app.ui.console.menu.impl.MainMenu;
 import bank.app.ui.console.uiservice.ConsoleLoginService;
 import bank.app.ui.console.uiservice.ConsoleNewMemberService;
-import bank.app.ui.console.uiservice.ConsoleRequestService;
+import bank.app.ui.console.uiservice.requestservice.ConsoleRequestService;
 
 @Configuration
 @EnableTransactionManagement

@@ -6,5 +6,5 @@ import bank.app.ui.console.ConsoleReader;
 
 public class AbstractConsoleService {
     @Autowired
-    ConsoleReader input;
+    protected ConsoleReader input;
 }

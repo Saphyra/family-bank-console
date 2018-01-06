@@ -16,22 +16,22 @@ public class Request {
     @Id
     @GeneratedValue
     private int id;
-    private int fromId;
-    private int toId;
+    private String fromName;
+    private String addresseeName;
     private double money;
     private @Enumerated(EnumType.STRING) RequestStatus status;
     private String requestMessage = DEFAULT_MESSAGE;
     private String answerMessage = DEFAULT_MESSAGE;
-    private @Temporal(TemporalType.DATE) Date sendDate;
-    private @Temporal(TemporalType.DATE) Date acceptDate;
+    private @Temporal(TemporalType.TIMESTAMP) Date sendDate;
+    private @Temporal(TemporalType.TIMESTAMP) Date answerDate;
 
     public Request() {
 
     }
 
-    public Request(int fromId, int toId, double money) {
-        this.fromId = fromId;
-        this.toId = toId;
+    public Request(String from, String addressee, double money) {
+        this.fromName = from;
+        this.addresseeName = addressee;
         this.money = money;
         status = RequestStatus.SENT;
         sendDate = new Date();
@@ -45,20 +45,20 @@ public class Request {
         this.id = id;
     }
 
-    public int getFromId() {
-        return fromId;
+    public String getFromName() {
+        return fromName;
     }
 
-    public void setFromId(int fromId) {
-        this.fromId = fromId;
+    public void setFromName(String fromName) {
+        this.fromName = fromName;
     }
 
-    public int getToId() {
-        return toId;
+    public String getAddresseeName() {
+        return addresseeName;
     }
 
-    public void setToId(int toId) {
-        this.toId = toId;
+    public void setAddresseeName(String addresseeName) {
+        this.addresseeName = addresseeName;
     }
 
     public double getMoney() {
@@ -109,11 +109,27 @@ public class Request {
         this.sendDate = sendDate;
     }
 
-    public Date getAcceptDate() {
-        return acceptDate;
+    public Date getAnswerDate() {
+        return answerDate;
     }
 
-    public void setAcceptDate(Date acceptDate) {
-        this.acceptDate = acceptDate;
+    public void setAnswerDate(Date acceptDate) {
+        this.answerDate = acceptDate;
+    }
+
+    public String getRequestInfo() {
+        // TODO write dates
+        StringBuilder builder = new StringBuilder();
+        builder.append("From: ").append(fromName)//
+                .append(" - To: ").append(addresseeName)//
+                .append(" - Money: ").append(money)//
+                .append(" - Request message: ").append(requestMessage)//
+                .append(" - Sent: ").append("Date")//
+                .append(" - Status: ").append(status);
+        if (status != RequestStatus.SENT && status != RequestStatus.PENDING) {
+            builder.append(" - Answer message: ").append(answerMessage)//
+                    .append(" - Answered: ").append("Date");
+        }
+        return builder.toString();
     }
 }

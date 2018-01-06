@@ -41,4 +41,8 @@ public class AccountDao extends AbstractDao {
 
         return result;
     }
+
+    public Account findById(int accountId) {
+        return entityManager.find(Account.class, accountId);
+    }
 }

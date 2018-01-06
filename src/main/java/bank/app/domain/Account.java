@@ -72,4 +72,12 @@ public class Account {
     public String toString() {
         return "Id: " + id + " - Name: " + name + " - Private Balance: " + privateBalance + " - Bank Balance: " + bankBalance;
     }
+
+    public String getAccountInfo() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Account name: ").append(name).append(System.lineSeparator())//
+                .append("Private balance: ").append(privateBalance).append(System.lineSeparator())//
+                .append("Bank balance: ").append(bankBalance);
+        return builder.toString();
+    }
 }

@@ -1,4 +1,4 @@
-package bank.app.ui.console.menu.impl;
+package bank.app.ui.console.uiservice.requestservice;
 
 import java.util.List;
 
@@ -6,14 +6,14 @@ import bank.app.ui.console.ConsoleReader;
 import bank.app.ui.console.menu.AbstractMenu;
 import bank.app.ui.console.menu.Option;
 
-public class IdGetterMenu extends AbstractMenu<String, Integer, String> {
+public class AccountGetterMenu extends AbstractMenu<String, Integer, String> {
     public static final int BANK_OPTION = 0;
     public static final int EXIT_OPTION = -1;
     private Option<Integer, String> exitOption = Option.optionFactory(EXIT_OPTION, "Cancel");
     private Option<Integer, String> bankOption = Option.optionFactory(BANK_OPTION, "Bank");
     private Option<Integer, String> selection;
 
-    public IdGetterMenu(ConsoleReader reader) {
+    public AccountGetterMenu(ConsoleReader reader) {
         super(reader);
     }
 

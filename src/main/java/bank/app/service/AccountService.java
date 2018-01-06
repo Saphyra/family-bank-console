@@ -22,4 +22,9 @@ public class AccountService extends AbstractService {
     public List<Account> getAllAccounts() {
         return accountDao.getAllAccounts();
     }
+
+    @Transactional(readOnly = true)
+    public Account findById(int accountId) {
+        return accountDao.findById(accountId);
+    }
 }
