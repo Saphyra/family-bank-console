@@ -1,4 +1,4 @@
-package bank.app.ui.console.uiservice;
+package bank.app.ui.console.uiservice.loginservice;
 
 import javax.persistence.NoResultException;
 
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import bank.app.domain.Account;
 import bank.app.service.AccountService;
 import bank.app.service.BankSession;
+import bank.app.ui.console.uiservice.AbstractConsoleService;
 
 public class ConsoleLoginService extends AbstractConsoleService {
     private @Autowired AccountService loginService;

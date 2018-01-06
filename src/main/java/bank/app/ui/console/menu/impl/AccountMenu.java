@@ -7,6 +7,7 @@ import bank.app.service.BankSession;
 import bank.app.ui.console.menu.AbstractMenu;
 import bank.app.ui.console.menu.Option;
 import bank.app.ui.console.uiservice.requestservice.ConsoleRequestService;
+import bank.app.ui.console.uiservice.transactionservice.ConsoleTransactionService;
 
 public class AccountMenu extends AbstractMenu<String, String, String> {
     private static final String VIEW_ACCOUNT_DATA_OPTION = "1";
@@ -19,6 +20,7 @@ public class AccountMenu extends AbstractMenu<String, String, String> {
 
     private @Autowired BankSession session;
     private @Autowired ConsoleRequestService request;
+    private @Autowired ConsoleTransactionService transaction;
 
     private Account account;
 
@@ -56,11 +58,13 @@ public class AccountMenu extends AbstractMenu<String, String, String> {
         case VIEW_REQUESTS_OPTION:
             request.viewAllRequests();
             break;
+        case NEW_TRANSACTION_OPTION:
+            transaction.newTransaction();
+            break;
+        case VIEW_TRANSACTIONS_OPTION:
+            transaction.viewTransactions();
+            break;
         }
-        // TODO implement menu points
-
-        // private static final String NEW_TRANSACTION_OPTION = "6";
-        // private static final String VIEW_TRANSACTIONS_OPTION = "7";
     }
 
     @Override

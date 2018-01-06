@@ -1,20 +1,23 @@
-package bank.app.ui.console.uiservice;
+package bank.app.ui.console.uiservice.newaccountservice;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import bank.app.domain.Account;
 import bank.app.service.NewAccountService;
+import bank.app.ui.console.uiservice.AbstractConsoleService;
 
-public class ConsoleNewMemberService extends AbstractConsoleService {
+public class ConsoleNewAccountService extends AbstractConsoleService {
     private @Autowired NewAccountService service;
 
-    // TODO refactor: extract methods
-    public void createNewMember() {
+    public void createNewAccount() {
         Account newAccount = new Account();
         newAccount.setName(input.getUserInput("Username:"));
         newAccount.setPassword(input.getUserInput("Password:"));
         newAccount.setPrivateBalance(getPrivateBalance());
+        registrateNewAccount(newAccount);
+    }
 
+    private void registrateNewAccount(Account newAccount) {
         if (isAccountValid(newAccount)) {
             service.save(newAccount);
             System.err.println("Account registered.");

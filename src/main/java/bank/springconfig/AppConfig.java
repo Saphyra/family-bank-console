@@ -13,19 +13,22 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import bank.app.Application;
 import bank.app.dao.AccountDao;
 import bank.app.dao.RequestDao;
+import bank.app.dao.TransactionDao;
 import bank.app.service.AccountService;
 import bank.app.service.BankSession;
 import bank.app.service.NewAccountService;
 import bank.app.service.RequestService;
+import bank.app.service.TransactionService;
 import bank.app.ui.UserInterface;
 import bank.app.ui.console.ConsoleReader;
 import bank.app.ui.console.ConsoleUserInterface;
 import bank.app.ui.console.menu.Menu;
 import bank.app.ui.console.menu.impl.AccountMenu;
 import bank.app.ui.console.menu.impl.MainMenu;
-import bank.app.ui.console.uiservice.ConsoleLoginService;
-import bank.app.ui.console.uiservice.ConsoleNewMemberService;
+import bank.app.ui.console.uiservice.loginservice.ConsoleLoginService;
+import bank.app.ui.console.uiservice.newaccountservice.ConsoleNewAccountService;
 import bank.app.ui.console.uiservice.requestservice.ConsoleRequestService;
+import bank.app.ui.console.uiservice.transactionservice.ConsoleTransactionService;
 
 @Configuration
 @EnableTransactionManagement
@@ -64,9 +67,9 @@ public class AppConfig {
     }
 
     @Bean
-    public ConsoleNewMemberService consoleNewMemberService() {
-        System.out.println("ConsoleNewMemberService bean created");
-        return new ConsoleNewMemberService();
+    public ConsoleNewAccountService consoleNewAccountService() {
+        System.out.println("ConsoleNewAccountService bean created");
+        return new ConsoleNewAccountService();
     }
 
     @Bean
@@ -81,10 +84,16 @@ public class AppConfig {
         return new ConsoleRequestService();
     }
 
+    @Bean
+    public ConsoleTransactionService consolTransactionService() {
+        System.out.println("ConsoleTransactionService bean created");
+        return new ConsoleTransactionService();
+    }
+
     // SERVICE
     @Bean
-    public NewAccountService newMemberService() {
-        System.out.println("NewMemberService bean created");
+    public NewAccountService newAccountService() {
+        System.out.println("NewAccountService bean created");
         return new NewAccountService();
     }
 
@@ -106,9 +115,15 @@ public class AppConfig {
         return new RequestService();
     }
 
+    @Bean
+    public TransactionService transactionService() {
+        System.out.println("TransactionService bean created");
+        return new TransactionService();
+    }
+
     // DAO
     @Bean
-    public AccountDao memberDao() {
+    public AccountDao accountDao() {
         System.out.println("AccountDao bean crated");
         return new AccountDao();
     }
@@ -117,6 +132,12 @@ public class AppConfig {
     public RequestDao requestDao() {
         System.out.println("RequestDao bean created");
         return new RequestDao();
+    }
+
+    @Bean
+    public TransactionDao transactionDao() {
+        System.out.println("TransactionDao bean created");
+        return new TransactionDao();
     }
 
     // DB CONNECTION

@@ -6,13 +6,13 @@ import bank.app.ui.console.ConsoleReader;
 import bank.app.ui.console.menu.AbstractMenu;
 import bank.app.ui.console.menu.Menu;
 import bank.app.ui.console.menu.Option;
-import bank.app.ui.console.uiservice.ConsoleLoginService;
-import bank.app.ui.console.uiservice.ConsoleNewMemberService;
+import bank.app.ui.console.uiservice.loginservice.ConsoleLoginService;
+import bank.app.ui.console.uiservice.newaccountservice.ConsoleNewAccountService;
 
 public class MainMenu extends AbstractMenu<String, String, String> {
     private static final String NEW_MEMBER_OPTION = "1";
     private static final String LOGIN_OPTION = "2";
-    private @Autowired ConsoleNewMemberService newMemberCreator;
+    private @Autowired ConsoleNewAccountService newMemberCreator;
     private @Autowired ConsoleLoginService login;
     private @Autowired Menu<String, String> accountMenu;
 
@@ -36,7 +36,7 @@ public class MainMenu extends AbstractMenu<String, String, String> {
     protected void enterMenu(Option<String, String> selectedOption) {
         switch (selectedOption.getKey()) {
         case NEW_MEMBER_OPTION:
-            newMemberCreator.createNewMember();
+            newMemberCreator.createNewAccount();
             break;
         case LOGIN_OPTION:
             login.login();

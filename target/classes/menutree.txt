@@ -4,6 +4,3 @@ Menu
 rename account
 change password
 delete account
-
-view new requests
-cancel requests
