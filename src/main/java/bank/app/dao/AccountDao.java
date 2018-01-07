@@ -45,4 +45,15 @@ public class AccountDao extends AbstractDao {
     public Account findById(int accountId) {
         return entityManager.find(Account.class, accountId);
     }
+
+    public void update(Account account) {
+        entityManager.merge(account);
+    }
+
+    public Account findByName(String name) {
+        String sql = "SELECT a FROM Account a WHERE a.name = :name";
+        TypedQuery<Account> query = entityManager.createQuery(sql, Account.class);
+        query.setParameter("name", name);
+        return query.getSingleResult();
+    }
 }

@@ -1,13 +1,12 @@
 package bank.app.ui.console.uiservice.requestservice;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import bank.app.domain.Account;
 import bank.app.domain.Request;
 import bank.app.service.AccountService;
 import bank.app.ui.console.ConsoleReader;
-import bank.app.ui.console.menu.Option;
+import bank.app.ui.console.uiservice.AccountGetterMenu;
 
 public class NewRequestCreator {
     private final ConsoleReader input;
@@ -36,38 +35,9 @@ public class NewRequestCreator {
     }
 
     private int getAddresseeId(int accountId) {
-        Option<Integer, String> selection = getSelection(accountId);
-        return selection.getKey();
-    }
-
-    private Option<Integer, String> getSelection(int accountId) {
-        AccountGetterMenu idGetterMenu = new AccountGetterMenu(input);
-        initIdGetterMenu(idGetterMenu, accountId);
-        Option<Integer, String> selection = idGetterMenu.getSelection();
-        return selection;
-    }
-
-    private void initIdGetterMenu(AccountGetterMenu idGetterMenu, int accountId) {
-        idGetterMenu.addAddressees(getAddressees(accountId));
-        idGetterMenu.interactUser();
-    }
-
-    private List<Option<Integer, String>> getAddressees(int accountId) {
-        List<Account> accounts = accountService.getAllAccounts();
-        List<Option<Integer, String>> result = getAddressees(accountId, accounts);
-        return result;
-    }
-
-    private List<Option<Integer, String>> getAddressees(int accountId, List<Account> accounts) {
-        List<Option<Integer, String>> result = new ArrayList<>();
-
-        for (Account account : accounts) {
-            if (account.getId() != accountId) {
-                Option<Integer, String> option = Option.optionFactory(account.getId(), account.getName());
-                result.add(option);
-            }
-        }
-        return result;
+        List<Account> addressees = accountService.getAddressees(accountId);
+        AccountGetterMenu accountGetterMenu = new AccountGetterMenu(input, addressees, AccountGetterMenu.BANK_INCLUDED);
+        return accountGetterMenu.getSelectedId();
     }
 
     private double getMoney() {

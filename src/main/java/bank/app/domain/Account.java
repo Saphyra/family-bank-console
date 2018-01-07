@@ -52,12 +52,28 @@ public class Account {
         this.privateBalance = privateBalance;
     }
 
+    public void addPrivateBalance(double money) {
+        privateBalance = privateBalance + money;
+    }
+
+    public void deductPrivateBalance(double money) {
+        privateBalance = privateBalance - money;
+    }
+
     public double getBankBalance() {
         return bankBalance;
     }
 
     public void setBankBalance(double bankBalance) {
         this.bankBalance = bankBalance;
+    }
+
+    public void addBankBalance(double money) {
+        bankBalance = bankBalance + money;
+    }
+
+    public void deductBankBalance(double money) {
+        bankBalance = bankBalance - money;
     }
 
     public List<Transaction> getTransactions() {

@@ -12,9 +12,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import bank.app.Application;
 import bank.app.dao.AccountDao;
+import bank.app.dao.BankDao;
 import bank.app.dao.RequestDao;
 import bank.app.dao.TransactionDao;
 import bank.app.service.AccountService;
+import bank.app.service.BankService;
 import bank.app.service.BankSession;
 import bank.app.service.NewAccountService;
 import bank.app.service.RequestService;
@@ -55,13 +57,13 @@ public class AppConfig {
     }
 
     @Bean
-    public Menu<String, String> mainMenu() {
+    public Menu<Integer, String> mainMenu() {
         System.out.println("MainMenu bean created");
         return new MainMenu(input());
     }
 
     @Bean
-    Menu<String, String> accountMenu() {
+    Menu<Integer, String> accountMenu() {
         System.out.println("AccountMenu bean created");
         return new AccountMenu();
     }
@@ -98,6 +100,12 @@ public class AppConfig {
     }
 
     @Bean
+    public BankService bankService() {
+        System.out.println("BankService bean created");
+        return new BankService();
+    }
+
+    @Bean
     public BankSession bankSession() {
         System.out.println("BankSession bean created");
         return new BankSession();
@@ -126,6 +134,12 @@ public class AppConfig {
     public AccountDao accountDao() {
         System.out.println("AccountDao bean crated");
         return new AccountDao();
+    }
+
+    @Bean
+    public BankDao bankDao() {
+        System.out.println("BankDao bean created");
+        return new BankDao();
     }
 
     @Bean

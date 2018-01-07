@@ -13,10 +13,17 @@ public class Bank {
     @GeneratedValue
     private int id;
     private String name;
-    private int balance;
+    private double balance;
 
     @OneToMany
     private List<Transaction> transactions;
+
+    public static Bank defaultBank() {
+        Bank bank = new Bank();
+        bank.setName("Bank");
+        bank.setBalance(0);
+        return bank;
+    }
 
     public int getId() {
         return id;
@@ -34,12 +41,20 @@ public class Bank {
         this.name = name;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public void addBalance(double money) {
+        this.balance = this.balance + money;
+    }
+
+    public void deductBalance(double money) {
+        this.balance = this.balance - money;
     }
 
     public List<Transaction> getTransactions() {
@@ -49,5 +64,4 @@ public class Bank {
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }
-
 }

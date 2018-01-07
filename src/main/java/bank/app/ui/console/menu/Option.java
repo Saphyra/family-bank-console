@@ -1,8 +1,8 @@
 package bank.app.ui.console.menu;
 
 public class Option<Key, Value> {
-    public static final String EXIT_KEY = "0";
-    public static final String BACK_KEY = "0";
+    public static final int EXIT_KEY = 0;
+    public static final int BACK_KEY = 0;
 
     private final Key key;
     private final Value value;
@@ -12,20 +12,20 @@ public class Option<Key, Value> {
         this.value = value;
     }
 
-    public static Option<String, String> defaultExitOption() {
-        return new Option<String, String>(EXIT_KEY, "Exit");
+    public static Option<Integer, String> defaultExitOption() {
+        return new Option<Integer, String>(EXIT_KEY, "Exit");
     }
 
-    public static Option<String, String> defaultBackOption() {
-        return new Option<String, String>(BACK_KEY, "Back");
+    public static Option<Integer, String> defaultBackOption() {
+        return new Option<Integer, String>(BACK_KEY, "Back");
     }
 
-    public static Option<String, String> defaultCancelOption() {
-        return new Option<String, String>(BACK_KEY, "Cancel");
+    public static Option<Integer, String> defaultCancelOption() {
+        return new Option<Integer, String>(BACK_KEY, "Cancel");
     }
 
-    public static Option<String, String> defaultLogoutOption() {
-        return new Option<String, String>(BACK_KEY, "Logout");
+    public static Option<Integer, String> defaultLogoutOption() {
+        return new Option<Integer, String>(BACK_KEY, "Logout");
     }
 
     public static <KeyType, OptionType> Option<KeyType, OptionType> optionFactory(KeyType key, OptionType value) {

@@ -9,12 +9,13 @@ import bank.app.ui.console.menu.Option;
 import bank.app.ui.console.uiservice.loginservice.ConsoleLoginService;
 import bank.app.ui.console.uiservice.newaccountservice.ConsoleNewAccountService;
 
-public class MainMenu extends AbstractMenu<String, String, String> {
-    private static final String NEW_MEMBER_OPTION = "1";
-    private static final String LOGIN_OPTION = "2";
-    private @Autowired ConsoleNewAccountService newMemberCreator;
+public class MainMenu extends AbstractMenu<String, Integer, String> {
+    private static final Option<Integer, String> exitOption = Option.defaultExitOption();
+    private static final int NEW_MEMBER_OPTION = 1;
+    private static final int LOGIN_OPTION = 2;
+    private @Autowired ConsoleNewAccountService newAccountService;
     private @Autowired ConsoleLoginService login;
-    private @Autowired Menu<String, String> accountMenu;
+    private @Autowired Menu<Integer, String> accountMenu;
 
     public MainMenu() {
         super();
@@ -33,15 +34,15 @@ public class MainMenu extends AbstractMenu<String, String, String> {
     }
 
     @Override
-    protected void enterMenu(Option<String, String> selectedOption) {
+    protected void enterMenu(Option<Integer, String> selectedOption) {
         switch (selectedOption.getKey()) {
         case NEW_MEMBER_OPTION:
-            newMemberCreator.createNewAccount();
+            newAccountService.createNewAccount();
             break;
         case LOGIN_OPTION:
             login.login();
             try {
-                accountMenu.interactUser(Option.defaultLogoutOption());
+                accountMenu.interactUser();
             } catch (IllegalStateException e) {
                 System.out.println(e.getMessage());
             }
@@ -50,7 +51,12 @@ public class MainMenu extends AbstractMenu<String, String, String> {
     }
 
     @Override
-    protected String convertInputToKey(String userInput) {
-        return userInput;
+    protected Integer convertInputToKey(String userInput) {
+        return Integer.valueOf(userInput);
+    }
+
+    @Override
+    public void interactUser() {
+        interactUser(exitOption);
     }
 }

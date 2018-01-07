@@ -1,5 +1,6 @@
 package bank.app.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -26,5 +27,29 @@ public class AccountService extends AbstractService {
     @Transactional(readOnly = true)
     public Account findById(int accountId) {
         return accountDao.findById(accountId);
+    }
+
+    @Transactional
+    public List<Account> getAddressees(int accountId) {
+        List<Account> accounts = getAllAccounts();
+        List<Account> addressees = new ArrayList<>();
+
+        for (Account account : accounts) {
+            if (account.getId() != accountId) {
+                addressees.add(account);
+            }
+        }
+
+        return addressees;
+    }
+
+    @Transactional
+    public void update(Account account) {
+        accountDao.update(account);
+    }
+
+    @Transactional
+    public Account findByName(String accountName) {
+        return accountDao.findByName(accountName);
     }
 }

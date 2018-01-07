@@ -20,9 +20,59 @@ public class Transaction {
     private int id;
     private String fromName;
     private String addresseeName;
-    private int money;
+    private double money;
     private @Enumerated(EnumType.STRING) TransactionType type;
     private @Temporal(TemporalType.TIMESTAMP) Date date;
+
+    public static Transaction depositTransaction(String fromName, double money) {
+        Transaction transaction = new Transaction();
+        transaction.setFromName(fromName);
+        transaction.setAddresseeName("Bank");
+        transaction.setMoney(money);
+        transaction.setType(TransactionType.DEPOSIT);
+        transaction.setDate(new Date());
+        return transaction;
+    }
+
+    public static Transaction withdrawTransaction(String addresseeName, double money) {
+        Transaction transaction = new Transaction();
+        transaction.setFromName("Bank");
+        transaction.setAddresseeName(addresseeName);
+        transaction.setMoney(money);
+        transaction.setType(TransactionType.WITHDRAW);
+        transaction.setDate(new Date());
+        return transaction;
+    }
+
+    public static Transaction earnTransaction(String addresseeName, double money) {
+        Transaction transaction = new Transaction();
+        transaction.setFromName("Unknown");
+        transaction.setAddresseeName(addresseeName);
+        transaction.setMoney(money);
+        transaction.setType(TransactionType.EARN);
+        transaction.setDate(new Date());
+        return transaction;
+    }
+
+    public static Transaction spendTransaction(String fromName, double money) {
+        Transaction transaction = new Transaction();
+        transaction.setFromName(fromName);
+        transaction.setAddresseeName("Unknown");
+        transaction.setMoney(money);
+        transaction.setType(TransactionType.SPEND);
+        transaction.setDate(new Date());
+        return transaction;
+    }
+
+    public static Transaction sendTransaction(String fromName, String addresseeName, double money) {
+        Transaction transaction = new Transaction();
+        transaction.setFromName(fromName);
+        transaction.setAddresseeName(addresseeName);
+        transaction.setMoney(money);
+        transaction.setType(TransactionType.SEND);
+        transaction.setDate(new Date());
+        return transaction;
+    }
 
     public int getId() {
         return id;
@@ -48,11 +98,11 @@ public class Transaction {
         this.addresseeName = addresseeName;
     }
 
-    public int getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 

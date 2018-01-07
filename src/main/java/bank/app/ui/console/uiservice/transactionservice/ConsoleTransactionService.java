@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import bank.app.domain.Account;
 import bank.app.domain.Transaction;
+import bank.app.service.AccountService;
 import bank.app.service.BankSession;
 import bank.app.service.TransactionService;
 import bank.app.ui.console.uiservice.AbstractConsoleService;
@@ -13,6 +14,7 @@ import bank.app.ui.console.uiservice.AbstractConsoleService;
 public class ConsoleTransactionService extends AbstractConsoleService {
     private @Autowired BankSession session;
     private @Autowired TransactionService transactionService;
+    private @Autowired AccountService accountService;
 
     public void viewTransactions() {
         Account account = session.getActualAccount();
@@ -28,6 +30,7 @@ public class ConsoleTransactionService extends AbstractConsoleService {
     }
 
     public void newTransaction() {
-        // TODO implement
+        NewTransactionMenu newTransaction = new NewTransactionMenu(input, transactionService, accountService, session);
+        newTransaction.interactUser();
     }
 }

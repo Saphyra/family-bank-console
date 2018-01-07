@@ -62,7 +62,6 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
 
     protected abstract void enterMenu(Option<KeyType, OptionType> selection);
 
-    @Override
     // TODO refactor: extract methods
     public void interactUser(Option<KeyType, OptionType> exitOption) {
         beforeStart();
