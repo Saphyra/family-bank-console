@@ -22,8 +22,9 @@ public class NewTransactionMenu extends AbstractMenu<String, Integer, String> {
     private static final int SPEND_OPTION = 5;
     private final TransactionService transactionService;
     private final AccountService accountService;
-    private final Account account;
+    private Account account;
     private final Bank bank;
+    private final BankSession session;
 
     public NewTransactionMenu(ConsoleReader input, TransactionService transactionService, AccountService accountService, BankSession session) {
         super(input);
@@ -31,6 +32,7 @@ public class NewTransactionMenu extends AbstractMenu<String, Integer, String> {
         this.accountService = accountService;
         this.account = session.getActualAccount();
         this.bank = session.getActualBank();
+        this.session = session;
     }
 
     @Override
@@ -69,6 +71,7 @@ public class NewTransactionMenu extends AbstractMenu<String, Integer, String> {
             spendMoney();
             break;
         }
+        account = session.getActualAccount();
     }
 
     // TODO refactor extract constants

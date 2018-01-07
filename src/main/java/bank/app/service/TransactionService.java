@@ -42,6 +42,9 @@ public class TransactionService extends AbstractService {
         case SPEND:
             executeSpendTransaction(transaction);
             break;
+        case INTEREST:
+            executeInterestTransaction(transaction);
+            break;
         }
 
         transactionDao.save(transaction);
@@ -94,10 +97,36 @@ public class TransactionService extends AbstractService {
     }
 
     private void executeRequestTransaction(Transaction transaction) {
-        Account sender = accountService.findByName(transaction.getFromName());
+        String fromName = transaction.getFromName();
+        String bankName = session.getActualBank().getName();
+        if (fromName.equals(bankName)) {
+            Bank bank = bankService.getBank(bankName);
+            bank.deductBalance(transaction.getMoney());
+            Account addressee = accountService.findByName(transaction.getAddresseeName());
+            addressee.deductBankBalance(transaction.getMoney());
+        } else {
+            Account sender = accountService.findByName(fromName);
+            sender.deductPrivateBalance(transaction.getMoney());
+        }
         Account addressee = accountService.findByName(transaction.getAddresseeName());
-
-        sender.deductPrivateBalance(transaction.getMoney());
         addressee.addPrivateBalance(transaction.getMoney());
+    }
+
+    private void executeInterestTransaction(Transaction transaction) {
+        String fromName = transaction.getFromName();
+        String addresseeName = transaction.getAddresseeName();
+        String bankName = session.getActualBank().getName();
+
+        if (fromName.equals(bankName)) {
+            Bank bank = bankService.getBank(fromName);
+            bank.deductBalance(transaction.getMoney());
+            Account account = accountService.findByName(addresseeName);
+            account.addBankBalance(transaction.getMoney());
+        } else {
+            Bank bank = bankService.getBank(addresseeName);
+            bank.addBalance(transaction.getMoney());
+            Account account = accountService.findByName(fromName);
+            account.deductBankBalance(transaction.getMoney());
+        }
     }
 }

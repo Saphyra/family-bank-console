@@ -1,6 +1,8 @@
 Menu
-3 bank administration
+view requests
+simulate new day
 
 rename account
 change password
 delete account
+

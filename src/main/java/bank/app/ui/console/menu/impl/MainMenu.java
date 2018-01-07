@@ -4,18 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import bank.app.ui.console.ConsoleReader;
 import bank.app.ui.console.menu.AbstractMenu;
-import bank.app.ui.console.menu.Menu;
 import bank.app.ui.console.menu.Option;
 import bank.app.ui.console.uiservice.loginservice.ConsoleLoginService;
 import bank.app.ui.console.uiservice.newaccountservice.ConsoleNewAccountService;
 
 public class MainMenu extends AbstractMenu<String, Integer, String> {
+    private static final int BANK_ADMINISTRATION_OPTION = 3;
     private static final Option<Integer, String> exitOption = Option.defaultExitOption();
     private static final int NEW_MEMBER_OPTION = 1;
     private static final int LOGIN_OPTION = 2;
     private @Autowired ConsoleNewAccountService newAccountService;
     private @Autowired ConsoleLoginService login;
-    private @Autowired Menu<Integer, String> accountMenu;
+    private @Autowired AccountMenu accountMenu;
+    private @Autowired BankMenu bankMenu;
 
     public MainMenu() {
         super();
@@ -31,6 +32,7 @@ public class MainMenu extends AbstractMenu<String, Integer, String> {
         addOption(Option.defaultExitOption());
         addOption(Option.optionFactory(NEW_MEMBER_OPTION, "New account"));
         addOption(Option.optionFactory(LOGIN_OPTION, "Login"));
+        addOption(Option.optionFactory(BANK_ADMINISTRATION_OPTION, "Bank administration"));
     }
 
     @Override
@@ -46,6 +48,9 @@ public class MainMenu extends AbstractMenu<String, Integer, String> {
             } catch (IllegalStateException e) {
                 System.out.println(e.getMessage());
             }
+            break;
+        case BANK_ADMINISTRATION_OPTION:
+            bankMenu.interactUser();
             break;
         }
     }

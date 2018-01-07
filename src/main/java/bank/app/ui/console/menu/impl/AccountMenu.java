@@ -3,6 +3,7 @@ package bank.app.ui.console.menu.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import bank.app.service.BankSession;
+import bank.app.ui.console.ConsoleReader;
 import bank.app.ui.console.menu.AbstractMenu;
 import bank.app.ui.console.menu.Option;
 import bank.app.ui.console.uiservice.requestservice.ConsoleRequestService;
@@ -37,6 +38,10 @@ public class AccountMenu extends AbstractMenu<String, Integer, String> {
         addOption(Option.optionFactory(VIEW_TRANSACTIONS_OPTION, "Wiew transactions"));
 
         setMenuFooter("Choose an option:");
+    }
+
+    public AccountMenu(ConsoleReader input) {
+        super(input);
     }
 
     @Override

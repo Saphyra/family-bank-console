@@ -36,7 +36,7 @@ public class Transaction {
 
     public static Transaction withdrawTransaction(String addresseeName, double money) {
         Transaction transaction = new Transaction();
-        transaction.setFromName("Bank");
+        transaction.setFromName(Bank.DEFAULT_BANK_NAME);
         transaction.setAddresseeName(addresseeName);
         transaction.setMoney(money);
         transaction.setType(TransactionType.WITHDRAW);
@@ -80,6 +80,26 @@ public class Transaction {
         transaction.setAddresseeName(request.getFromName());
         transaction.setMoney(request.getMoney());
         transaction.setType(TransactionType.REQUEST);
+        transaction.setDate(new Date());
+        return transaction;
+    }
+
+    public static Transaction negativeInterestTransaction(String accountName, double money) {
+        Transaction transaction = new Transaction();
+        transaction.setAddresseeName(Bank.DEFAULT_BANK_NAME);
+        transaction.setFromName(accountName);
+        transaction.setMoney(money);
+        transaction.setType(TransactionType.INTEREST);
+        transaction.setDate(new Date());
+        return transaction;
+    }
+
+    public static Transaction positiveInterestTransaction(String accountName, double money) {
+        Transaction transaction = new Transaction();
+        transaction.setFromName(Bank.DEFAULT_BANK_NAME);
+        transaction.setAddresseeName(accountName);
+        transaction.setMoney(money);
+        transaction.setType(TransactionType.INTEREST);
         transaction.setDate(new Date());
         return transaction;
     }

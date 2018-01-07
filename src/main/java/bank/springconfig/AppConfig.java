@@ -26,7 +26,9 @@ import bank.app.ui.console.ConsoleReader;
 import bank.app.ui.console.ConsoleUserInterface;
 import bank.app.ui.console.menu.Menu;
 import bank.app.ui.console.menu.impl.AccountMenu;
+import bank.app.ui.console.menu.impl.BankMenu;
 import bank.app.ui.console.menu.impl.MainMenu;
+import bank.app.ui.console.uiservice.bankservice.BankNewRequestMenu;
 import bank.app.ui.console.uiservice.loginservice.ConsoleLoginService;
 import bank.app.ui.console.uiservice.newaccountservice.ConsoleNewAccountService;
 import bank.app.ui.console.uiservice.requestservice.ConsoleRequestService;
@@ -63,9 +65,15 @@ public class AppConfig {
     }
 
     @Bean
-    Menu<Integer, String> accountMenu() {
+    public AccountMenu accountMenu() {
         System.out.println("AccountMenu bean created");
-        return new AccountMenu();
+        return new AccountMenu(input());
+    }
+
+    @Bean
+    public BankMenu bankMenu() {
+        System.out.println("BankMenu bean created");
+        return new BankMenu(input());
     }
 
     @Bean
@@ -90,6 +98,12 @@ public class AppConfig {
     public ConsoleTransactionService consolTransactionService() {
         System.out.println("ConsoleTransactionService bean created");
         return new ConsoleTransactionService();
+    }
+
+    @Bean
+    public BankNewRequestMenu bankNewRequestService() {
+        System.out.println("BankNewRequestService bean created");
+        return new BankNewRequestMenu(input(), requestService());
     }
 
     // SERVICE

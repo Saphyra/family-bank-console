@@ -16,13 +16,18 @@ public class NewRequestsMenu extends AbstractMenu<String, Integer, Request> {
     }
     private static final Option<Integer, Request> exitOption = Option.optionFactory(0, EXIT_REQUEST);
 
-    private final RequestService requestService;
-    private final Account account;
+    protected final RequestService requestService;
+    private Account account;
 
     public NewRequestsMenu(ConsoleReader input, RequestService requestService, Account account) {
         super(input);
         this.requestService = requestService;
         this.account = account;
+    }
+
+    protected NewRequestsMenu(ConsoleReader input, RequestService requestService) {
+        super(input);
+        this.requestService = requestService;
     }
 
     @Override
