@@ -1,22 +1,29 @@
 package bank.app.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import bank.app.domain.Account;
 import bank.app.domain.Bank;
 
 public class BankSession {
-    private Account actualAccount;
+    private @Autowired AccountService accountService;
+    private int actualAccountId = 0;
     private Bank actualBank;
 
     public Account getActualAccount() {
-        return actualAccount;
+        return accountService.findById(actualAccountId);
     }
 
     public void setActualAccount(Account actualAccount) {
-        this.actualAccount = actualAccount;
+        if (actualAccount == null) {
+            this.actualAccountId = 0;
+        } else {
+            this.actualAccountId = actualAccount.getId();
+        }
     }
 
     public boolean isInSession() {
-        return actualAccount != null;
+        return actualAccountId != 0;
     }
 
     public Bank getActualBank() {

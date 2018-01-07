@@ -30,7 +30,7 @@ public class AccountMenu extends AbstractMenu<String, Integer, String> {
         addOption(exitOption);
         addOption(Option.optionFactory(VIEW_ACCOUNT_DATA_OPTION, "Wiew account data"));
         addOption(Option.optionFactory(VIEW_NEW_REQUESTS_OPTION, "View new requests"));
-        addOption(Option.optionFactory(NEW_REQUEST_OPTION, "New requests"));
+        addOption(Option.optionFactory(NEW_REQUEST_OPTION, "Create new request"));
         addOption(Option.optionFactory(VIEW_PENDING_REQUESTS_OPTION, "View pending requests"));
         addOption(Option.optionFactory(VIEW_REQUESTS_OPTION, "Wiew all requests"));
         addOption(Option.optionFactory(NEW_TRANSACTION_OPTION, "New transaction"));

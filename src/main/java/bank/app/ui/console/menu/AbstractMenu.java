@@ -17,6 +17,7 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
     private Map<KeyType, Option<KeyType, OptionType>> options = new TreeMap<>();
     private String menuHeader = "Options:";
     private String menuFooter = "Choose your option: ";
+    private boolean onlyOneRun = false;
 
     protected AbstractMenu() {
         this.input = new ConsoleReader(new InputStreamReader(System.in));
@@ -63,6 +64,7 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
     protected abstract void enterMenu(Option<KeyType, OptionType> selection);
 
     // TODO refactor: extract methods
+    @Override
     public void interactUser(Option<KeyType, OptionType> exitOption) {
         beforeStart();
         setDisplayedMessages();
@@ -76,7 +78,7 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
                 enterMenu(selection);
                 afterEnterMenu();
             }
-        } while (!isExit(exitOption, selection));
+        } while (!onlyOneRun && !isExit(exitOption, selection));
         afterExit();
     }
 
@@ -170,5 +172,13 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
 
     private boolean isExit(Option<KeyType, OptionType> exitOption, Option<KeyType, OptionType> selection) {
         return selection.getKey().equals(exitOption.getKey());
+    }
+
+    public boolean isOnlyOneRun() {
+        return onlyOneRun;
+    }
+
+    public void setOnlyOneRun(boolean onlyOneRun) {
+        this.onlyOneRun = onlyOneRun;
     }
 }

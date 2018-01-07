@@ -7,8 +7,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import bank.app.util.DateFormat;
 
@@ -24,8 +22,8 @@ public class Request {
     private @Enumerated(EnumType.STRING) RequestStatus status;
     private String requestMessage = DEFAULT_MESSAGE;
     private String answerMessage = DEFAULT_MESSAGE;
-    private @Temporal(TemporalType.TIMESTAMP) Date sendDate;
-    private @Temporal(TemporalType.TIMESTAMP) Date answerDate;
+    private long sendDate;
+    private long answerDate;
 
     public Request() {
 
@@ -36,7 +34,7 @@ public class Request {
         this.addresseeName = addressee;
         this.money = money;
         status = RequestStatus.SENT;
-        sendDate = new Date();
+        sendDate = new Date().getTime();
     }
 
     public int getId() {
@@ -104,19 +102,27 @@ public class Request {
     }
 
     public Date getSendDate() {
-        return sendDate;
+        return new Date(sendDate);
     }
 
     public void setSendDate(Date sendDate) {
-        this.sendDate = sendDate;
+        setSendDate(sendDate.getTime());
+    }
+
+    public void setSendDate(long timestamp) {
+        this.sendDate = timestamp;
     }
 
     public Date getAnswerDate() {
-        return answerDate;
+        return new Date(answerDate);
     }
 
     public void setAnswerDate(Date acceptDate) {
-        this.answerDate = acceptDate;
+        setAnswerDate(acceptDate.getTime());
+    }
+
+    public void setAnswerDate(long timestamp) {
+        this.answerDate = timestamp;
     }
 
     public String getRequestInfo() {
@@ -125,12 +131,20 @@ public class Request {
                 .append(" - To: ").append(addresseeName)//
                 .append(" - Money: ").append(money)//
                 .append(" - Request message: ").append(requestMessage)//
-                .append(" - Sent: ").append(DateFormat.formatDate(sendDate))//
+                .append(" - Sent: ").append(DateFormat.formatDate(getSendDate()))//
                 .append(" - Status: ").append(status);
         if (status != RequestStatus.SENT && status != RequestStatus.PENDING && status != RequestStatus.CANCELLED) {
             builder.append(" - Answer message: ").append(answerMessage)//
-                    .append(" - Answered: ").append(DateFormat.formatDate(answerDate));
+                    .append(" - Answered: ").append(DateFormat.formatDate(getAnswerDate()));
         }
         return builder.toString();
+    }
+
+    @Override
+    public String toString() {
+        if (id == 0) {
+            return "Cancel";
+        }
+        return getRequestInfo();
     }
 }

@@ -1,5 +1,6 @@
 package bank.app.ui.console.uiservice.requestservice;
 
+import java.util.Date;
 import java.util.List;
 
 import bank.app.domain.Account;
@@ -28,6 +29,7 @@ public class NewRequestCreator {
                     String addresseeName = getAddresseeName(addresseeId);
                     request = new Request(account.getName(), addresseeName, money);
                     request.setRequestMessage(requestMessage);
+                    request.setSendDate(new Date());
                 }
             }
         }

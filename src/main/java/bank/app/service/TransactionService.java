@@ -28,7 +28,7 @@ public class TransactionService extends AbstractService {
             executeDepositTransaction(transaction);
             break;
         case REQUEST:
-            // TODO implement
+            executeRequestTransaction(transaction);
             break;
         case SEND:
             executeSendTransaction(transaction);
@@ -91,5 +91,13 @@ public class TransactionService extends AbstractService {
         addressee.addPrivateBalance(transaction.getMoney());
 
         accountService.update(sender);
+    }
+
+    private void executeRequestTransaction(Transaction transaction) {
+        Account sender = accountService.findByName(transaction.getFromName());
+        Account addressee = accountService.findByName(transaction.getAddresseeName());
+
+        sender.deductPrivateBalance(transaction.getMoney());
+        addressee.addPrivateBalance(transaction.getMoney());
     }
 }

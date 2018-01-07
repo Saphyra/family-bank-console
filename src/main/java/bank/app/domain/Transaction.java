@@ -74,6 +74,16 @@ public class Transaction {
         return transaction;
     }
 
+    public static Transaction requestTransaction(Request request) {
+        Transaction transaction = new Transaction();
+        transaction.setFromName(request.getAddresseeName());
+        transaction.setAddresseeName(request.getFromName());
+        transaction.setMoney(request.getMoney());
+        transaction.setType(TransactionType.REQUEST);
+        transaction.setDate(new Date());
+        return transaction;
+    }
+
     public int getId() {
         return id;
     }

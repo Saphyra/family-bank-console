@@ -43,8 +43,8 @@ public class ConsoleRequestService extends AbstractConsoleService {
         if (requests.isEmpty()) {
             System.out.println("No new requests!");
         } else {
-            NewRequestsMenu newRequestsMenu = new NewRequestsMenu(input);
-            newRequestsMenu.addRequests(requests);
+            NewRequestsMenu newRequestsMenu = new NewRequestsMenu(input, requestService, session.getActualAccount());
+            newRequestsMenu.interactUser();
         }
     }
 
