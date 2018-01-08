@@ -10,6 +10,11 @@ public class ConsoleReader extends BufferedReader {
         super(input);
     }
 
+    public String getUserInput(String label) {
+        System.out.println(label);
+        return getUserInput();
+    }
+
     public String getUserInput() {
         String result = "";
         try {
@@ -18,10 +23,5 @@ public class ConsoleReader extends BufferedReader {
             e.printStackTrace();
         }
         return result;
-    }
-
-    public String getUserInput(String label) {
-        System.out.println(label);
-        return getUserInput();
     }
 }

@@ -29,128 +29,114 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
 
     protected abstract void setDisplayedMessages();
 
-    protected void addMessage(MessageType message) {
-        messages.add(message);
-    }
-
-    protected void clearMessages() {
-        messages.clear();
-    }
-
-    protected void addOption(Option<KeyType, OptionType> content) {
-        options.put(content.getKey(), content);
-    }
-
-    protected void clearOptions() {
-        options.clear();
-    }
-
-    public String getMenuHeader() {
-        return menuHeader;
-    }
-
-    public void setMenuHeader(String menuHeader) {
-        this.menuHeader = menuHeader;
-    }
-
-    public String getMenuFooter() {
-        return menuFooter;
-    }
-
-    public void setMenuFooter(String menuFooter) {
-        this.menuFooter = menuFooter;
-    }
-
-    protected abstract void enterMenu(Option<KeyType, OptionType> selection);
-
-    // TODO refactor: extract methods
-    @Override
-    public void interactUser(Option<KeyType, OptionType> exitOption) {
+    protected void interactUser(Option<KeyType, OptionType> exitOption) {
         beforeStart();
         setDisplayedMessages();
-        Option<KeyType, OptionType> selection = null;
-        do {
-            beforeSelection();
-            selection = doInteract();
-            afterSelection();
-            if (!isExit(exitOption, selection)) {
-                beforeEnterMenu();
-                enterMenu(selection);
-                afterEnterMenu();
-            }
-        } while (!onlyOneRun && !isExit(exitOption, selection));
+        runMenuSequences(exitOption);
         afterExit();
     }
 
     protected void beforeStart() {
     }
 
+    protected final void runMenuSequences(Option<KeyType, OptionType> exitOption) {
+        Option<KeyType, OptionType> selection = null;
+        do {
+            selection = runMenuSequence(exitOption);
+        } while (!onlyOneRun && !isExit(exitOption, selection));
+    }
+
+    protected final Option<KeyType, OptionType> runMenuSequence(Option<KeyType, OptionType> exitOption) {
+        beforeSelection();
+        Option<KeyType, OptionType> selection = doInteract();
+        afterSelection();
+        if (!isExit(exitOption, selection)) {
+            runMenu(selection);
+        }
+        return selection;
+    }
+
     protected void beforeSelection() {
     }
 
-    protected void afterSelection() {
-    }
-
-    protected void beforeEnterMenu() {
-    }
-
-    protected void afterEnterMenu() {
-    }
-
-    protected void afterExit() {
-    }
-
-    // TODO refactor: extract methods
     protected Option<KeyType, OptionType> doInteract() {
+        printUI();
+        Option<KeyType, OptionType> selection = selectOption();
+        return selection;
+    }
+
+    protected void printUI() {
+        printMessages();
         printMenu();
+    }
+
+    protected void printMessages() {
+        printLineSeparator();
+        for (MessageType message : messages) {
+            printMessage(message);
+        }
+        printLineSeparator();
+    }
+
+    protected final void printLineSeparator() {
+        System.out.println(System.lineSeparator());
+    }
+
+    protected final void printMessage(MessageType message) {
+        System.out.println(message.toString());
+    }
+
+    protected void printMenu() {
+        printMenuHeader();
+        printMenuOptions();
+        printLineSeparator();
+    }
+
+    protected final void printMenuHeader() {
+        System.out.println(menuHeader);
+    }
+
+    protected final void printMenuOptions() {
+        Set<KeyType> keys = options.keySet();
+        for (KeyType key : keys) {
+            printMenuItem(key, options.get(key));
+        }
+    }
+
+    protected void printMenuItem(KeyType key, Option<KeyType, OptionType> content) {
+        System.out.println("[" + key + "] - " + content.toString());
+    }
+
+    protected final Option<KeyType, OptionType> selectOption() {
         Option<KeyType, OptionType> selection = null;
         do {
-            try {
-                selection = getUserSelection();
-            } catch (NoSuchElementException e) {
-                System.out.println(e.getMessage());
-            }
+            selection = getSelection();
         } while (selection == null);
         return selection;
     }
 
-    protected void printMenu() {
-        printMessages();
-        printOptions();
-    }
-
-    private void printMessages() {
-        System.out.println("\n");
-        for (MessageType message : messages) {
-            System.out.println(message.toString());
+    protected final Option<KeyType, OptionType> getSelection() {
+        Option<KeyType, OptionType> selection = null;
+        try {
+            selection = getUserSelection();
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
         }
-        System.out.println("");
-    }
-
-    // TODO refactor: extract methods
-    private void printOptions() {
-        System.out.println(menuHeader);
-        Set<KeyType> keys = options.keySet();
-        for (KeyType key : keys) {
-            Option<KeyType, OptionType> content = options.get(key);
-            System.out.println("[" + key + "] - " + content.toString());
-        }
-        System.out.println();
+        return selection;
     }
 
     protected Option<KeyType, OptionType> getUserSelection() throws NoSuchElementException {
         Option<KeyType, OptionType> result = null;
-
         KeyType key = getKey();
         validateKey(key);
         result = options.get(key);
 
-        System.err.println("Selected option is: " + result.toString());
+        printSelectedOption(result);
 
         return result;
     }
 
-    private KeyType getKey() {
+    protected final KeyType getKey() {
         KeyType key = null;
         try {
             String userInput = input.getUserInput(menuFooter);
@@ -164,21 +150,78 @@ public abstract class AbstractMenu<MessageType, KeyType extends Comparable<KeyTy
 
     protected abstract KeyType convertInputToKey(String userInput) throws Exception;
 
-    private void validateKey(KeyType key) {
+    protected final void validateKey(KeyType key) {
         if (!options.containsKey(key)) {
             throw new NoSuchElementException("Invalid user input.");
         }
     }
 
-    private boolean isExit(Option<KeyType, OptionType> exitOption, Option<KeyType, OptionType> selection) {
+    protected void printSelectedOption(Option<KeyType, OptionType> result) {
+        System.err.println("Selected option is: " + result.toString());
+    }
+
+    protected void afterSelection() {
+    }
+
+    protected final boolean isExit(Option<KeyType, OptionType> exitOption, Option<KeyType, OptionType> selection) {
         return selection.getKey().equals(exitOption.getKey());
     }
 
-    public boolean isOnlyOneRun() {
+    protected final void runMenu(Option<KeyType, OptionType> selection) {
+        beforeEnterMenu();
+        enterMenu(selection);
+        afterEnterMenu();
+    }
+
+    protected void beforeEnterMenu() {
+    }
+
+    protected abstract void enterMenu(Option<KeyType, OptionType> selection);
+
+    protected void afterEnterMenu() {
+    }
+
+    protected void afterExit() {
+    }
+
+    ///////
+    protected final void addMessage(MessageType message) {
+        messages.add(message);
+    }
+
+    protected final void clearMessages() {
+        messages.clear();
+    }
+
+    protected final void addOption(Option<KeyType, OptionType> content) {
+        options.put(content.getKey(), content);
+    }
+
+    protected final void clearOptions() {
+        options.clear();
+    }
+
+    protected final String getMenuHeader() {
+        return menuHeader;
+    }
+
+    protected final void setMenuHeader(String menuHeader) {
+        this.menuHeader = menuHeader;
+    }
+
+    protected final String getMenuFooter() {
+        return menuFooter;
+    }
+
+    protected final void setMenuFooter(String menuFooter) {
+        this.menuFooter = menuFooter;
+    }
+
+    protected final boolean isOnlyOneRun() {
         return onlyOneRun;
     }
 
-    public void setOnlyOneRun(boolean onlyOneRun) {
+    protected final void setOnlyOneRun(boolean onlyOneRun) {
         this.onlyOneRun = onlyOneRun;
     }
 }

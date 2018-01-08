@@ -14,6 +14,14 @@ import bank.app.ui.console.menu.Option;
 import bank.app.ui.console.uiservice.AccountGetterMenu;
 
 public class NewTransactionMenu extends AbstractMenu<String, Integer, String> {
+    private static final String WITHDRAW_INPUT_EXCEPTION_MESSAGE = "You cannot withdraw more money than you have in bank, or the bank's actual balance.";
+    private static final String WITHDRAW_INPUT_MESSAGE = "How much money do you want to withdraw?";
+    private static final String DEPOSIT_INPUT_EXCEPTION_MESSAGE = "You cannot deposit more money than you actually have.";
+    private static final String DEPOSIT_INPUT_MESSAGE = "How much money do you want to deposit?";
+    private static final String SEND_INPUT_EXCEPTION_MESSAGE = "You cannot send more money than you actually have.";
+    private static final String SEND_INPUT_MESSAGE = "How much money do you want to send?";
+    private static final String SPEND_INPUT_EXCEPTION_MESSAGE = "You cannot spend more money than you actually have.";
+    private static final String SPEND_INPUT_MESSAGE = "How much money do you want to spend?";
     private static final Option<Integer, String> exitOption = Option.defaultBackOption();
     private static final int SEND_OPTION = 1;
     private static final int WITHDRAW_OPTION = 2;
@@ -74,9 +82,8 @@ public class NewTransactionMenu extends AbstractMenu<String, Integer, String> {
         account = session.getActualAccount();
     }
 
-    // TODO refactor extract constants
     public void depositMoney() {
-        double money = getMoney(account.getPrivateBalance(), "How much money do you want to deposit?", "You cannot deposit more money than you actually have.");
+        double money = getMoney(account.getPrivateBalance(), DEPOSIT_INPUT_MESSAGE, DEPOSIT_INPUT_EXCEPTION_MESSAGE);
         if (money > 0) {
             Transaction transaction = createDepositTransaction(money);
             transactionService.sendTransaction(transaction);
@@ -90,11 +97,9 @@ public class NewTransactionMenu extends AbstractMenu<String, Integer, String> {
         return transaction;
     }
 
-    // TODO refactor extract constants
     private void withdrawMoney() {
         double maxMoney = getWithdrawMaxMoney();
-        double money = getMoney(maxMoney, "How much money do you want to withdraw?",
-                "You cannot withdraw more money than you have in bank, or the bank's actual balance.");
+        double money = getMoney(maxMoney, WITHDRAW_INPUT_MESSAGE, WITHDRAW_INPUT_EXCEPTION_MESSAGE);
         if (money > 0) {
             Transaction transaction = createWithdrawTransaction(money);
             transactionService.sendTransaction(transaction);
@@ -127,9 +132,8 @@ public class NewTransactionMenu extends AbstractMenu<String, Integer, String> {
         return transaction;
     }
 
-    // TODO refactor extract constant
     private void spendMoney() {
-        double money = getMoney(account.getPrivateBalance(), "How much money do you want to spend?", "You cannot spend more money than you actually have.");
+        double money = getMoney(account.getPrivateBalance(), SPEND_INPUT_MESSAGE, SPEND_INPUT_EXCEPTION_MESSAGE);
         if (money > 0) {
             Transaction transaction = createSpendTransaction(money);
             transactionService.sendTransaction(transaction);
@@ -148,7 +152,7 @@ public class NewTransactionMenu extends AbstractMenu<String, Integer, String> {
         AccountGetterMenu accountGetter = new AccountGetterMenu(input, accounts, AccountGetterMenu.BANK_EXCLUDED);
         int addresseeId = accountGetter.getSelectedId();
         if (addresseeId != AccountGetterMenu.EXIT_OPTION) {
-            double money = getMoney(account.getPrivateBalance(), "How much money do you want to send?", "You cannot send more money than you actually have.");
+            double money = getMoney(account.getPrivateBalance(), SEND_INPUT_MESSAGE, SEND_INPUT_EXCEPTION_MESSAGE);
             if (money > 0) {
                 Transaction transaction = createSendTransaction(addresseeId, money);
                 transactionService.sendTransaction(transaction);

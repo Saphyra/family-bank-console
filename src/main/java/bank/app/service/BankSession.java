@@ -7,8 +7,9 @@ import bank.app.domain.Bank;
 
 public class BankSession {
     private @Autowired AccountService accountService;
+    private @Autowired BankService bankService;
     private int actualAccountId = 0;
-    private Bank actualBank;
+    private String actualBankName;
 
     public Account getActualAccount() {
         return accountService.findById(actualAccountId);
@@ -27,10 +28,10 @@ public class BankSession {
     }
 
     public Bank getActualBank() {
-        return actualBank;
+        return bankService.getBank(actualBankName);
     }
 
     public void setActualBank(Bank actualBank) {
-        this.actualBank = actualBank;
+        this.actualBankName = actualBank.getName();
     }
 }

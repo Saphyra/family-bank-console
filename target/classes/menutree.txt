@@ -1,8 +1,0 @@
-Menu
-view requests
-simulate new day
-
-rename account
-change password
-delete account
-
