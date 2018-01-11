@@ -19,6 +19,7 @@ public class BankService extends AbstractService {
         bankDao.update(bank);
     }
 
+    @Transactional(readOnly = true)
     public Bank getBank(String bankName) {
         return bankDao.getBank(bankName);
     }

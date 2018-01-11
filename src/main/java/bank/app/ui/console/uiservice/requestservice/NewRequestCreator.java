@@ -57,7 +57,7 @@ public class NewRequestCreator {
         if (addresseeId == AccountGetterMenu.BANK_OPTION) {
             result = bank.getName();
         } else {
-            Account addressee = accountService.findById(addresseeId);
+            Account addressee = accountService.getAccount(addresseeId);
             result = addressee.getName();
         }
         return result;

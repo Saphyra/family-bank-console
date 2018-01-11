@@ -16,7 +16,7 @@ public class TransactionService extends AbstractService {
     private @Autowired AccountService accountService;
     private @Autowired BankSession session;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Transaction> getAllTransactionsByName(String accountName) {
         return transactionDao.getAllTransactionsByName(accountName);
     }

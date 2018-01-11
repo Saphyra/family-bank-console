@@ -24,11 +24,11 @@ public class AccountService extends AbstractService {
     }
 
     @Transactional(readOnly = true)
-    public Account findById(int accountId) {
+    public Account getAccount(int accountId) {
         return accountDao.findById(accountId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Account> getAddressees(int accountId) {
         List<Account> accounts = getAllAccounts();
         return selectAddresseesFromUsers(accountId, accounts);

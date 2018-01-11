@@ -12,7 +12,7 @@ public class BankSession {
     private String actualBankName;
 
     public Account getActualAccount() {
-        return accountService.findById(actualAccountId);
+        return accountService.getAccount(actualAccountId);
     }
 
     public void setActualAccount(Account actualAccount) {

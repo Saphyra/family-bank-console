@@ -21,9 +21,9 @@ public class RequestService extends AbstractService {
         requestDao.save(request);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Request> getNewRequests(String addresseeName) {
-        List<Request> requests = requestDao.getNewRequests(addresseeName);
+        List<Request> requests = requestDao.getNewRequestsByAddresseeName(addresseeName);
         setNewRequestsPending(requests);
 
         return requests;
@@ -38,17 +38,16 @@ public class RequestService extends AbstractService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Request> getRequestsByFromName(String fromName) {
         return requestDao.getRequestsByFromName(fromName);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Request> getPendingRequestsByFromName(String fromName) {
         return requestDao.getPendingRequestsByFromName(fromName);
     }
 
-    @Transactional
     public void cancelRequest(int requestId) {
         Request request = requestDao.findById(requestId);
         request.setStatus(RequestStatus.CANCELLED);

@@ -12,7 +12,7 @@ public class RequestDao extends AbstractDao {
         entityManager.persist(request);
     }
 
-    public List<Request> getNewRequests(String addresseeName) {
+    public List<Request> getNewRequestsByAddresseeName(String addresseeName) {
         String sql = "SELECT r FROM Request r WHERE r.addresseeName = :addresseeName AND (r.status = :sentStatus OR r.status = :pendingStatus) ORDER BY r.sendDate DESC";
         TypedQuery<Request> query = entityManager.createQuery(sql, Request.class);
         query.setParameter("addresseeName", addresseeName);

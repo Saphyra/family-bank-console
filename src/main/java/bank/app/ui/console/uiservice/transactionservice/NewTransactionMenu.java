@@ -164,7 +164,7 @@ public class NewTransactionMenu extends AbstractMenu<String, Integer, String> {
     }
 
     private Transaction createSendTransaction(int addresseeId, double money) {
-        String addresseeName = accountService.findById(addresseeId).getName();
+        String addresseeName = accountService.getAccount(addresseeId).getName();
         Transaction transaction = Transaction.sendTransaction(account.getName(), addresseeName, money);
         System.out.println("Transaction sent.");
         System.out.println(transaction.getTransactionInfo());
