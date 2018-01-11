@@ -24,8 +24,12 @@ public class ConsoleTransactionService extends AbstractConsoleService {
     }
 
     private void printTransactions(List<Transaction> transactions) {
-        for (Transaction transaction : transactions) {
-            System.out.println(transaction.getTransactionInfo());
+        if (transactions.isEmpty()) {
+            System.out.println("No transactions.");
+        } else {
+            for (Transaction transaction : transactions) {
+                System.out.println(transaction.getTransactionInfo());
+            }
         }
     }
 

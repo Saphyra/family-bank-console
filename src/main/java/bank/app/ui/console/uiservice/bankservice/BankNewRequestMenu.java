@@ -1,7 +1,10 @@
 package bank.app.ui.console.uiservice.bankservice;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
+import bank.app.domain.Bank;
 import bank.app.domain.Request;
 import bank.app.service.BankSession;
 import bank.app.service.RequestService;
@@ -15,7 +18,7 @@ public class BankNewRequestMenu extends NewRequestsMenu {
     static {
         EXIT_REQUEST.setId(0);
     }
-    private static final Option<Integer, Request> exitOption = Option.optionFactory(0, EXIT_REQUEST);
+    private static final Option<Integer, Request> EXIT_OPTION = Option.optionFactory(0, EXIT_REQUEST);
     private @Autowired BankSession session;
 
     public BankNewRequestMenu(ConsoleReader input, RequestService requestService) {
@@ -24,27 +27,36 @@ public class BankNewRequestMenu extends NewRequestsMenu {
 
     @Override
     public void interactUser() {
-        interactUser(exitOption);
+        interactUser(EXIT_OPTION);
 
     }
 
     @Override
-    protected void setDisplayedMessages() {
+    protected void initMenu() {
         setMenuHeader("The following requests are waiting for your acceptance:");
-        addOption(exitOption);
+        addOption(EXIT_OPTION);
     }
 
     @Override
     public void beforeSelection() {
         clearOptions();
-        addOption(exitOption);
-        addRequests(requestService.getNewRequests(session.getActualBank().getName()));
+        addOption(EXIT_OPTION);
+        List<Request> newRequests = getNewRequests();
+        addRequests(newRequests);
+    }
+
+    private List<Request> getNewRequests() {
+        Bank actualBank = session.getActualBank();
+        String bankName = actualBank.getName();
+        return requestService.getNewRequests(bankName);
     }
 
     @Override
     protected void enterMenu(Option<Integer, Request> selection) {
-        RequestModifierMenu rmMenu = new RequestModifierMenu(input, requestService, selection.getValue());
-        rmMenu.modify(session.getActualBank().getBalance());
+        double balance = session.getActualBank().getBalance();
+        Request request = selection.getValue();
+        RequestModifierMenu rmMenu = new RequestModifierMenu(input, requestService, request, balance);
+        rmMenu.interactUser();
     }
 
     @Override

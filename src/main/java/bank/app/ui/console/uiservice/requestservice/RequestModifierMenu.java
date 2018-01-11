@@ -16,25 +16,13 @@ public class RequestModifierMenu extends AbstractMenu<String, Integer, String> {
 
     private final RequestService requestService;
     private final Request request;
+    private final double maxMoney;
 
-    public RequestModifierMenu(ConsoleReader input, RequestService requestService, Request request) {
+    public RequestModifierMenu(ConsoleReader input, RequestService requestService, Request request, double maxMoney) {
         super(input);
         this.requestService = requestService;
         this.request = request;
-    }
-
-    public void modify(double maxMoney) {
-        setOnlyOneRun(true);
-        clearMessages();
-        clearOptions();
-        setDisplayedMessages();
-        addMessage(request.getRequestInfo());
-        addOption(cancelOption);
-        addOption(denyOption);
-        if (request.getMoney() <= maxMoney) {
-            addOption(acceptOption);
-        }
-        interactUser();
+        this.maxMoney = maxMoney;
     }
 
     @Override
@@ -43,25 +31,42 @@ public class RequestModifierMenu extends AbstractMenu<String, Integer, String> {
     }
 
     @Override
-    protected void setDisplayedMessages() {
+    protected void initMenu() {
+        setOnlyOneRun(true);
+        clearMessages();
+        clearOptions();
         setMenuFooter("What do you want to do with this request?");
+        addMessage(request.getRequestInfo());
+        addOption(cancelOption);
+        addOption(denyOption);
+        if (request.getMoney() <= maxMoney) {
+            addOption(acceptOption);
+        }
     }
 
     @Override
     protected void enterMenu(Option<Integer, String> selection) {
         switch (selection.getKey()) {
         case DENY_OPTION:
-            String denyMessage = input.getUserInput("Why do you deny te request? (Empty string to cancel)");
-            if (!denyMessage.isEmpty()) {
-                requestService.deny(request, denyMessage);
-            }
+            denyRequest();
             break;
         case ACCEPT_OPTION:
-            String acceptMessage = input.getUserInput("Why do you accept te request? (Empty string to cancel)");
-            if (!acceptMessage.isEmpty()) {
-                requestService.accept(request, acceptMessage);
-            }
+            acceptRequest();
             break;
+        }
+    }
+
+    private void denyRequest() {
+        String denyMessage = input.getUserInput("Why do you deny te request? (Empty string to cancel)");
+        if (!denyMessage.isEmpty()) {
+            requestService.deny(request, denyMessage);
+        }
+    }
+
+    private void acceptRequest() {
+        String acceptMessage = input.getUserInput("Why do you accept te request? (Empty string to cancel)");
+        if (!acceptMessage.isEmpty()) {
+            requestService.accept(request, acceptMessage);
         }
     }
 

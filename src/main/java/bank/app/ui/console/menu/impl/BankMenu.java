@@ -37,7 +37,7 @@ public class BankMenu extends AbstractMenu<String, Integer, String> {
     }
 
     @Override
-    protected void setDisplayedMessages() {
+    protected void initMenu() {
         setMenuHeader("Welcome to the bank!");
         setMenuFooter("What do you want to do?");
         addOption(exitOption);
@@ -66,7 +66,6 @@ public class BankMenu extends AbstractMenu<String, Integer, String> {
         return Integer.valueOf(userInput);
     }
 
-    // TODO refactor extract method
     private void simulateNewDay() {
         List<Account> accounts = accountService.getAllAccounts();
         double allInterest = 0;

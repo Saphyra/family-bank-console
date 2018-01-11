@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import bank.app.ui.console.uiservice.requestservice.NewRequestData;
 import bank.app.util.DateFormat;
 
 @Entity
@@ -26,15 +27,18 @@ public class Request {
     private long answerDate;
 
     public Request() {
-
     }
 
-    public Request(String from, String addressee, double money) {
+    public Request(String from, String addressee, double money, String requestMessage) {
         this.fromName = from;
         this.addresseeName = addressee;
         this.money = money;
+        this.requestMessage = requestMessage;
         status = RequestStatus.SENT;
-        sendDate = new Date().getTime();
+    }
+
+    public Request(NewRequestData requestData) {
+        this(requestData.getFromName(), requestData.getAddresseeName(), requestData.getMoney(), requestData.getMessage());
     }
 
     public int getId() {

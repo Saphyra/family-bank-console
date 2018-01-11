@@ -11,8 +11,12 @@ public class ConsoleReader extends BufferedReader {
     }
 
     public String getUserInput(String label) {
-        System.out.println(label);
+        printLabel(label);
         return getUserInput();
+    }
+
+    private void printLabel(String label) {
+        System.out.println(label);
     }
 
     public String getUserInput() {

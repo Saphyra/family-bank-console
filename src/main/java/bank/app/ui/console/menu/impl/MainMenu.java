@@ -9,10 +9,14 @@ import bank.app.ui.console.uiservice.loginservice.ConsoleLoginService;
 import bank.app.ui.console.uiservice.newaccountservice.ConsoleNewAccountService;
 
 public class MainMenu extends AbstractMenu<String, Integer, String> {
-    private static final int BANK_ADMINISTRATION_OPTION = 3;
-    private static final Option<Integer, String> exitOption = Option.defaultExitOption();
-    private static final int NEW_MEMBER_OPTION = 1;
-    private static final int LOGIN_OPTION = 2;
+    private static final Option<Integer, String> EXIT_OPTION = Option.defaultExitOption();
+    private static final int NEW_MEMBER_OPTION_KEY = 1;
+    private static final Option<Integer, String> NEW_MEMBER_OPTION = Option.optionFactory(NEW_MEMBER_OPTION_KEY, "New account");
+    private static final int LOGIN_OPTION_KEY = 2;
+    private static final Option<Integer, String> LOGIN_OPTION = Option.optionFactory(LOGIN_OPTION_KEY, "Login");
+    private static final int BANK_ADMINISTRATION_OPTION_KEY = 3;
+    private static final Option<Integer, String> BANK_ADMINISTRATION_OPTION = Option.optionFactory(BANK_ADMINISTRATION_OPTION_KEY, "Bank administration");
+
     private @Autowired ConsoleNewAccountService newAccountService;
     private @Autowired ConsoleLoginService login;
     private @Autowired AccountMenu accountMenu;
@@ -27,31 +31,35 @@ public class MainMenu extends AbstractMenu<String, Integer, String> {
     }
 
     @Override
-    protected void setDisplayedMessages() {
+    protected void initMenu() {
         addMessage("Welcome to family bank!");
-        addOption(Option.defaultExitOption());
-        addOption(Option.optionFactory(NEW_MEMBER_OPTION, "New account"));
-        addOption(Option.optionFactory(LOGIN_OPTION, "Login"));
-        addOption(Option.optionFactory(BANK_ADMINISTRATION_OPTION, "Bank administration"));
+        addOption(EXIT_OPTION);
+        addOption(NEW_MEMBER_OPTION);
+        addOption(LOGIN_OPTION);
+        addOption(BANK_ADMINISTRATION_OPTION);
     }
 
     @Override
     protected void enterMenu(Option<Integer, String> selectedOption) {
         switch (selectedOption.getKey()) {
-        case NEW_MEMBER_OPTION:
+        case NEW_MEMBER_OPTION_KEY:
             newAccountService.createNewAccount();
             break;
-        case LOGIN_OPTION:
+        case LOGIN_OPTION_KEY:
             login.login();
-            try {
-                accountMenu.interactUser();
-            } catch (IllegalStateException e) {
-                System.out.println(e.getMessage());
-            }
+            enterAccountMenu();
             break;
-        case BANK_ADMINISTRATION_OPTION:
+        case BANK_ADMINISTRATION_OPTION_KEY:
             bankMenu.interactUser();
             break;
+        }
+    }
+
+    private void enterAccountMenu() {
+        try {
+            accountMenu.interactUser();
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -62,6 +70,6 @@ public class MainMenu extends AbstractMenu<String, Integer, String> {
 
     @Override
     public void interactUser() {
-        interactUser(exitOption);
+        interactUser(EXIT_OPTION);
     }
 }

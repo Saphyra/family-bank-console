@@ -31,7 +31,7 @@ public class NewRequestsMenu extends AbstractMenu<String, Integer, Request> {
     }
 
     @Override
-    protected void setDisplayedMessages() {
+    protected void initMenu() {
         setMenuHeader("The following requests are waiting for your acceptance:");
         addOption(exitOption);
     }
@@ -44,8 +44,12 @@ public class NewRequestsMenu extends AbstractMenu<String, Integer, Request> {
     }
 
     public void addRequests(List<Request> requests) {
-        for (Request request : requests) {
-            addOption(Option.optionFactory(request.getId(), request));
+        if (requests.isEmpty()) {
+            addMessage("No new requests.");
+        } else {
+            for (Request request : requests) {
+                addOption(Option.optionFactory(request.getId(), request));
+            }
         }
     }
 
@@ -56,8 +60,8 @@ public class NewRequestsMenu extends AbstractMenu<String, Integer, Request> {
 
     @Override
     protected void enterMenu(Option<Integer, Request> selection) {
-        RequestModifierMenu rmMenu = new RequestModifierMenu(input, requestService, selection.getValue());
-        rmMenu.modify(account.getPrivateBalance());
+        RequestModifierMenu rmMenu = new RequestModifierMenu(input, requestService, selection.getValue(), account.getPrivateBalance());
+        rmMenu.interactUser();
     }
 
     @Override

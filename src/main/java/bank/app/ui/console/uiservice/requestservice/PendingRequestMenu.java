@@ -26,7 +26,7 @@ public class PendingRequestMenu extends AbstractMenu<String, Integer, String> {
     }
 
     @Override
-    protected void setDisplayedMessages() {
+    protected void initMenu() {
         setMenuHeader("The following requests are waiting for answer:");
         setMenuFooter("Choose a request to cancel");
         addOption(exitOption);
@@ -46,16 +46,14 @@ public class PendingRequestMenu extends AbstractMenu<String, Integer, String> {
 
     @Override
     protected void enterMenu(Option<Integer, String> selection) {
-        if (selection.getKey() != CANCEL_OPTION) {
-            requestService.cancelRequest(selection.getKey());
-        }
+        requestService.cancelRequest(selection.getKey());
     }
 
     @Override
     protected void afterEnterMenu() {
         clearOptions();
         clearMessages();
-        setDisplayedMessages();
+        initMenu();
     }
 
     @Override

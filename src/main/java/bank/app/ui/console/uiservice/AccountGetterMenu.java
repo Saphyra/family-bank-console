@@ -26,7 +26,7 @@ public class AccountGetterMenu extends AbstractMenu<String, Integer, String> {
     }
 
     @Override
-    protected void setDisplayedMessages() {
+    protected void initMenu() {
         setMenuHeader("You can choose one of the following addressees:");
         setMenuFooter("Select the addressee:");
         addOption(exitOption);
@@ -43,7 +43,7 @@ public class AccountGetterMenu extends AbstractMenu<String, Integer, String> {
     }
 
     public int getSelectedId() {
-        setDisplayedMessages();
+        initMenu();
         Option<Integer, String> selection = doInteract();
         return selection.getKey();
     }

@@ -1,6 +1,6 @@
 package bank.app.ui.console.uiservice.loginservice;
 
-import javax.persistence.NoResultException;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,6 +14,7 @@ public class ConsoleLoginService extends AbstractConsoleService {
     private @Autowired BankSession session;
 
     public void login() {
+        System.out.println("Logging in...");
         Account account = getAccount();
         session.setActualAccount(account);
         if (session.isInSession()) {
@@ -21,28 +22,44 @@ public class ConsoleLoginService extends AbstractConsoleService {
         }
     }
 
-    // TODO refactor: extract methods
     private Account getAccount() {
-        Account result = null;
-        System.out.println("Logging in... Send empty string to cancel process.");
-        String username = input.getUserInput("Username:");
+        String username = getUsername();
+        String password = getPassword(username);
+
+        return getAccount(username, password);
+    }
+
+    private String getUsername() {
+        return input.getUserInput("Username: (Empty string to cancel)");
+    }
+
+    private String getPassword(String username) {
         String password = "";
+
         if (!username.isEmpty()) {
-            password = input.getUserInput("Password:");
-            if (!password.isEmpty()) {
-                try {
-                    result = loginService.getAccount(username, password);
-                } catch (NoResultException e) {
-                    System.err.println("No registrated user with the given username and password.");
-                    result = getAccount();
-                }
-            } else {
-                System.out.println("Login process cancelled.");
+            password = input.getUserInput("Password: (Empty string to cancel)");
+        } else {
+            printCancelMessage();
+        }
+        return password;
+    }
+
+    private Account getAccount(String username, String password) {
+        Account account = null;
+        if (!username.isEmpty() && !password.isEmpty()) {
+            try {
+                account = loginService.getAccount(username, password);
+            } catch (NoSuchElementException e) {
+                e.getMessage();
+                account = getAccount();
             }
         } else {
-            System.out.println("Login process cancelled.");
+            printCancelMessage();
         }
+        return account;
+    }
 
-        return result;
+    private void printCancelMessage() {
+        System.out.println("Login process cancelled.");
     }
 }

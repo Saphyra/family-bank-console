@@ -7,24 +7,36 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import bank.app.ui.console.uiservice.newaccountservice.NewAccountData;
+
 @Entity
 public class Account {
     @Id
     @GeneratedValue
-    private int id;
+    private Integer id;
     private String name;
     private String password;
-    private double privateBalance;
-    private double bankBalance;
+    private Double privateBalance;
+    private Double bankBalance;
+
+    public Account() {
+    }
+
+    public Account(NewAccountData accountData) {
+        this.name = accountData.getUsername();
+        this.password = accountData.getPassword();
+        this.privateBalance = accountData.getPrivateBalance();
+        this.bankBalance = 0.0;
+    }
 
     @OneToMany
     private List<Transaction> transactions;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -44,11 +56,11 @@ public class Account {
         this.password = password;
     }
 
-    public double getPrivateBalance() {
+    public Double getPrivateBalance() {
         return privateBalance;
     }
 
-    public void setPrivateBalance(double privateBalance) {
+    public void setPrivateBalance(Double privateBalance) {
         this.privateBalance = privateBalance;
     }
 
@@ -60,11 +72,11 @@ public class Account {
         privateBalance = privateBalance - money;
     }
 
-    public double getBankBalance() {
+    public Double getBankBalance() {
         return bankBalance;
     }
 
-    public void setBankBalance(double bankBalance) {
+    public void setBankBalance(Double bankBalance) {
         this.bankBalance = bankBalance;
     }
 

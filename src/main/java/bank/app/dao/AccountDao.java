@@ -1,7 +1,9 @@
 package bank.app.dao;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -19,8 +21,11 @@ public class AccountDao extends AbstractDao {
         Query query = entityManager.createQuery(sql);
         query.setParameter("username", username);
         query.setParameter("password", password);
-
-        result = (Account) query.getSingleResult();
+        try {
+            result = (Account) query.getSingleResult();
+        } catch (NoResultException e) {
+            throw new NoSuchElementException("No registrated user with the given username and password.");
+        }
 
         return result;
     }
@@ -37,9 +42,8 @@ public class AccountDao extends AbstractDao {
     public List<Account> getAllAccounts() {
         String sql = "SELECT a FROM Account a";
         TypedQuery<Account> query = entityManager.createQuery(sql, Account.class);
-        List<Account> result = query.getResultList();
 
-        return result;
+        return query.getResultList();
     }
 
     public Account findById(int accountId) {

@@ -10,20 +10,85 @@ public class ConsoleNewAccountService extends AbstractConsoleService {
     private @Autowired NewAccountService service;
 
     public void createNewAccount() {
-        String username = input.getUserInput("Username: (Empty string to cancel)");
-        if (!username.isEmpty()) {
-            String password = input.getUserInput("Password: (Empty string to cancel)");
-            if (!password.isEmpty()) {
-                double privateBalance = getPrivateBalance();
-                if (privateBalance >= 0) {
-                    Account newAccount = new Account();
-                    newAccount.setName(username);
-                    newAccount.setPassword(password);
-                    newAccount.setPrivateBalance(privateBalance);
-                    registrateNewAccount(newAccount);
-                }
-            }
+        NewAccountData accountData = new NewAccountData();
+        setNewAccountData(accountData);
+        Account newAccount = new Account(accountData);
+        if (isAccountValid(newAccount)) {
+            registrateNewAccount(newAccount);
         }
+    }
+
+    private void setNewAccountData(NewAccountData accountData) {
+        setUsername(accountData);
+        setPassword(accountData);
+        setPrivateBalance(accountData);
+    }
+
+    private void setUsername(NewAccountData data) {
+        String username = input.getUserInput("Username: (Empty string to cancel)");
+        data.setUsername(username);
+    }
+
+    private void setPassword(NewAccountData data) {
+        if (!data.getUsername().isEmpty()) {
+            String password = input.getUserInput("Password: (Empty string to cancel)");
+            data.setPassword(password);
+        }
+    }
+
+    private void setPrivateBalance(NewAccountData data) {
+        if (!data.getPassword().isEmpty()) {
+            double privateBalance = getStartBalance(data);
+            data.setPrivateBalance(privateBalance);
+        }
+    }
+
+    private double getStartBalance(NewAccountData data) {
+        String userInput = input.getUserInput("Staring balance: (Enter -1 to cancel)");
+        double privateBalance = convertInput(data, userInput);
+        try {
+            validateInput(privateBalance);
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+            getStartBalance(data);
+        }
+        return privateBalance;
+    }
+
+    private double convertInput(NewAccountData data, String userInput) {
+        double privateBalance = 0;
+        try {
+            privateBalance = Double.parseDouble(userInput);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid input. Please type a number!");
+            getStartBalance(data);
+        }
+        return privateBalance;
+    }
+
+    private void validateInput(double privateBalance) {
+        if (privateBalance < 0 && privateBalance != -1.0) {
+            throw new IllegalArgumentException("Starting balance cannot be negative.");
+        }
+    }
+
+    private boolean isAccountValid(Account newAccount) {
+        boolean result = true;
+        if (newAccount.getName().isEmpty()) {
+            printLoginCancelledMessage();
+            result = false;
+        } else if (newAccount.getPassword().isEmpty()) {
+            printLoginCancelledMessage();
+            result = false;
+        } else if (service.isUsernameRegistered(newAccount)) {
+            System.err.println("Account is already registered with the given name");
+            result = false;
+        }
+        return result;
+    }
+
+    private void printLoginCancelledMessage() {
+        System.err.println("Login process cancelled.");
     }
 
     private void registrateNewAccount(Account newAccount) {
@@ -33,38 +98,5 @@ public class ConsoleNewAccountService extends AbstractConsoleService {
         } else {
             System.err.println("Account registration failed.");
         }
-    }
-
-    private boolean isAccountValid(Account newAccount) {
-        boolean result = true;
-        if (newAccount.getName().isEmpty()) {
-            System.err.println("Invalid account name.");
-            result = false;
-        } else if (newAccount.getPassword().isEmpty()) {
-            System.err.println("Invalid password.");
-            result = false;
-        } else if (service.isUsernameRegistered(newAccount)) {
-            System.err.println("Account is already registered with the given name");
-            result = false;
-        }
-        return result;
-    }
-
-    private double getPrivateBalance() {
-        double result = 0;
-        String userInput = input.getUserInput("Staring balance: (Enter -1 to cancel)");
-        try {
-            result = Double.parseDouble(userInput);
-            if (result < 0 && result != -1.0) {
-                throw new IllegalArgumentException("Starting balance cannot be negative.");
-            }
-        } catch (NumberFormatException e) {
-            System.err.println("Invalid parameter. Please type a number!");
-            result = getPrivateBalance();
-        } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-            result = getPrivateBalance();
-        }
-        return result;
     }
 }

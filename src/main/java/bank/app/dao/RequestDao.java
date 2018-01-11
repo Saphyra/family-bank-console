@@ -22,11 +22,6 @@ public class RequestDao extends AbstractDao {
         return query.getResultList();
     }
 
-    public void setRequestStatus(Request request, RequestStatus status) {
-        request.setStatus(status);
-        update(request);
-    }
-
     public void update(Request request) {
         entityManager.merge(request);
     }

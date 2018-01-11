@@ -98,35 +98,50 @@ public class TransactionService extends AbstractService {
 
     private void executeRequestTransaction(Transaction transaction) {
         String fromName = transaction.getFromName();
-        String bankName = session.getActualBank().getName();
+        String bankName = session.getActualBankName();
         if (fromName.equals(bankName)) {
-            Bank bank = bankService.getBank(bankName);
-            bank.deductBalance(transaction.getMoney());
-            Account addressee = accountService.findByName(transaction.getAddresseeName());
-            addressee.deductBankBalance(transaction.getMoney());
+            payRequestFromBank(transaction);
         } else {
-            Account sender = accountService.findByName(fromName);
-            sender.deductPrivateBalance(transaction.getMoney());
+            payRequestFromUser(transaction);
         }
         Account addressee = accountService.findByName(transaction.getAddresseeName());
         addressee.addPrivateBalance(transaction.getMoney());
     }
 
+    private void payRequestFromBank(Transaction transaction) {
+        Bank bank = bankService.getBank(transaction.getFromName());
+        bank.deductBalance(transaction.getMoney());
+        Account addressee = accountService.findByName(transaction.getAddresseeName());
+        addressee.deductBankBalance(transaction.getMoney());
+    }
+
+    private void payRequestFromUser(Transaction transaction) {
+        Account sender = accountService.findByName(transaction.getFromName());
+        sender.deductPrivateBalance(transaction.getMoney());
+    }
+
     private void executeInterestTransaction(Transaction transaction) {
         String fromName = transaction.getFromName();
-        String addresseeName = transaction.getAddresseeName();
-        String bankName = session.getActualBank().getName();
+        String bankName = session.getActualBankName();
 
         if (fromName.equals(bankName)) {
-            Bank bank = bankService.getBank(fromName);
-            bank.deductBalance(transaction.getMoney());
-            Account account = accountService.findByName(addresseeName);
-            account.addBankBalance(transaction.getMoney());
+            payInterestToAccount(transaction);
         } else {
-            Bank bank = bankService.getBank(addresseeName);
-            bank.addBalance(transaction.getMoney());
-            Account account = accountService.findByName(fromName);
-            account.deductBankBalance(transaction.getMoney());
+            payInterestToBank(transaction);
         }
+    }
+
+    private void payInterestToAccount(Transaction transaction) {
+        Bank bank = bankService.getBank(transaction.getFromName());
+        bank.deductBalance(transaction.getMoney());
+        Account account = accountService.findByName(transaction.getAddresseeName());
+        account.addBankBalance(transaction.getMoney());
+    }
+
+    private void payInterestToBank(Transaction transaction) {
+        Bank bank = bankService.getBank(transaction.getAddresseeName());
+        bank.addBalance(transaction.getMoney());
+        Account account = accountService.findByName(transaction.getFromName());
+        account.deductBankBalance(transaction.getMoney());
     }
 }

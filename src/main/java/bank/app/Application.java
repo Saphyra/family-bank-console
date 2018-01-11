@@ -24,9 +24,13 @@ public class Application {
     }
 
     private void start() {
+        initApp();
+        ui.run();
+    }
+
+    private void initApp() {
         Bank bank = Bank.defaultBank();
         bankService.save(bank);
         session.setActualBank(bank);
-        ui.run();
     }
 }

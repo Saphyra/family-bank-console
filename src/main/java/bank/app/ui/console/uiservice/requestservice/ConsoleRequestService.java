@@ -17,46 +17,73 @@ public class ConsoleRequestService extends AbstractConsoleService {
     private @Autowired RequestService requestService;
 
     public void createNewRequest() {
-        NewRequestCreator creator = new NewRequestCreator(input, accountService);
-        Account account = session.getActualAccount();
-        Request request = creator.createRequest(account);
-
+        Request request = getNewRequest();
         if (request != null) {
             sendRequest(request);
         }
     }
 
+    private Request getNewRequest() {
+        NewRequestCreator creator = new NewRequestCreator(input, accountService, session);
+        Request request = creator.createRequest();
+        return request;
+    }
+
     private void sendRequest(Request request) {
         requestService.saveRequest(request);
-        System.out.println("Request sent.");
-        System.out.println(request.getRequestInfo());
+        printSuccessMessage(request);
+    }
+
+    private void printSuccessMessage(Request request) {
+        System.err.println("Request sent.");
+        printRequest(request);
     }
 
     public void viewNewRequests() {
         Account account = session.getActualAccount();
         String addresseeName = account.getName();
         List<Request> newRequests = requestService.getNewRequests(addresseeName);
-        userInteractionWithNewRequests(newRequests);
+        interactionWithNewRequests(newRequests);
     }
 
-    private void userInteractionWithNewRequests(List<Request> requests) {
+    private void interactionWithNewRequests(List<Request> requests) {
         if (requests.isEmpty()) {
-            System.out.println("No new requests!");
+            printNoNewRequestMessage();
         } else {
-            NewRequestsMenu newRequestsMenu = new NewRequestsMenu(input, requestService, session.getActualAccount());
-            newRequestsMenu.interactUser();
+            interactWithNewRequests();
         }
+    }
+
+    private void interactWithNewRequests() {
+        NewRequestsMenu newRequestsMenu = new NewRequestsMenu(input, requestService, session.getActualAccount());
+        newRequestsMenu.interactUser();
+    }
+
+    private void printNoNewRequestMessage() {
+        System.out.println("No new requests!");
     }
 
     public void viewAllRequests() {
+        List<Request> requests = getAllRequests();
+        printAllRequests(requests);
+    }
+
+    private List<Request> getAllRequests() {
         Account actualAccount = session.getActualAccount();
         String name = actualAccount.getName();
         List<Request> requests = requestService.getRequestsByFromName(name);
+        return requests;
+    }
 
+    private void printAllRequests(List<Request> requests) {
         System.err.println("\nYou have sent the following requests:");
         for (Request request : requests) {
-            System.out.println(request.getRequestInfo());
+            printRequest(request);
         }
+    }
+
+    private void printRequest(Request request) {
+        System.out.println(request.getRequestInfo());
     }
 
     public void viewPendingRequests() {

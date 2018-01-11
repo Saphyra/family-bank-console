@@ -22,12 +22,15 @@ public class NewTransactionMenu extends AbstractMenu<String, Integer, String> {
     private static final String SEND_INPUT_MESSAGE = "How much money do you want to send?";
     private static final String SPEND_INPUT_EXCEPTION_MESSAGE = "You cannot spend more money than you actually have.";
     private static final String SPEND_INPUT_MESSAGE = "How much money do you want to spend?";
+
     private static final Option<Integer, String> exitOption = Option.defaultBackOption();
+
     private static final int SEND_OPTION = 1;
     private static final int WITHDRAW_OPTION = 2;
     private static final int DEPOSIT_OPTION = 3;
     private static final int EARN_OPTION = 4;
     private static final int SPEND_OPTION = 5;
+
     private final TransactionService transactionService;
     private final AccountService accountService;
     private Account account;
@@ -49,7 +52,7 @@ public class NewTransactionMenu extends AbstractMenu<String, Integer, String> {
     }
 
     @Override
-    protected void setDisplayedMessages() {
+    protected void initMenu() {
         setMenuHeader("");
         setMenuFooter("Choose one transaction type!");
         addOption(exitOption);
@@ -186,20 +189,32 @@ public class NewTransactionMenu extends AbstractMenu<String, Integer, String> {
         double result = 0;
 
         String userInput = input.getUserInput(message + " (Enter 0 to cancel)");
+        result = convertInput(userInput, message);
         try {
-            result = Double.valueOf(userInput);
-            if (result < 0) {
-                throw new IllegalArgumentException("Number must not be negative!");
-            }
-        } catch (NumberFormatException e) {
-            System.err.println("Enter a number!");
-            result = getMoney(message);
+            validateInput(result);
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
             result = getMoney(message);
         }
 
         return result;
+    }
+
+    protected double convertInput(String userInput, String message) {
+        double result = 0.0;
+        try {
+            result = Double.valueOf(userInput);
+        } catch (NumberFormatException e) {
+            System.err.println("Enter a number!");
+            result = getMoney(message);
+        }
+        return result;
+    }
+
+    protected void validateInput(double input) {
+        if (input < 0) {
+            throw new IllegalArgumentException("Number must not be negative!");
+        }
     }
 
     @Override

@@ -34,4 +34,8 @@ public class BankSession {
     public void setActualBank(Bank actualBank) {
         this.actualBankName = actualBank.getName();
     }
+
+    public String getActualBankName() {
+        return actualBankName;
+    }
 }

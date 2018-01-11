@@ -2,8 +2,7 @@ package bank.app.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.NoResultException;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +14,7 @@ public class AccountService extends AbstractService {
     private @Autowired AccountDao accountDao;
 
     @Transactional(readOnly = true)
-    public Account getAccount(String username, String password) throws NoResultException {
+    public Account getAccount(String username, String password) throws NoSuchElementException {
         return accountDao.getAccount(username, password);
     }
 
@@ -32,6 +31,10 @@ public class AccountService extends AbstractService {
     @Transactional
     public List<Account> getAddressees(int accountId) {
         List<Account> accounts = getAllAccounts();
+        return selectAddresseesFromUsers(accountId, accounts);
+    }
+
+    private List<Account> selectAddresseesFromUsers(int accountId, List<Account> accounts) {
         List<Account> addressees = new ArrayList<>();
 
         for (Account account : accounts) {
@@ -39,7 +42,6 @@ public class AccountService extends AbstractService {
                 addressees.add(account);
             }
         }
-
         return addressees;
     }
 

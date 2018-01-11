@@ -17,6 +17,7 @@ public class RequestService extends AbstractService {
 
     @Transactional
     public void saveRequest(Request request) {
+        request.setSendDate(new Date());
         requestDao.save(request);
     }
 
@@ -32,14 +33,9 @@ public class RequestService extends AbstractService {
         for (Request request : requests) {
             if (request.getStatus() == RequestStatus.SENT) {
                 System.out.println(request.getSendDate());
-                setRequestStatus(request, RequestStatus.PENDING);
+                request.setStatus(RequestStatus.PENDING);
             }
         }
-    }
-
-    @Transactional
-    public void setRequestStatus(Request request, RequestStatus status) {
-        requestDao.setRequestStatus(request, status);
     }
 
     @Transactional

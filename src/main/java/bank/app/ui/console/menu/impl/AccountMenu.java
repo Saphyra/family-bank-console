@@ -10,32 +10,39 @@ import bank.app.ui.console.uiservice.requestservice.ConsoleRequestService;
 import bank.app.ui.console.uiservice.transactionservice.ConsoleTransactionService;
 
 public class AccountMenu extends AbstractMenu<String, Integer, String> {
-    private static final Option<Integer, String> exitOption = Option.defaultLogoutOption();
-    private static final int VIEW_ACCOUNT_DATA_OPTION = 1;
-    private static final int VIEW_NEW_REQUESTS_OPTION = 2;
-    private static final int NEW_REQUEST_OPTION = 3;
-    private static final int VIEW_PENDING_REQUESTS_OPTION = 4;
-    private static final int VIEW_REQUESTS_OPTION = 5;
-    private static final int NEW_TRANSACTION_OPTION = 6;
-    private static final int VIEW_TRANSACTIONS_OPTION = 7;
+    private static final Option<Integer, String> EXIT_OPTION = Option.defaultLogoutOption();
+    private static final int VIEW_ACCOUNT_DATA_OPTION_KEY = 1;
+    private static final Option<Integer, String> VIEW_ACCOUNT_DATA_OPTION = Option.optionFactory(VIEW_ACCOUNT_DATA_OPTION_KEY, "Wiew account data");
+    private static final int VIEW_NEW_REQUESTS_OPTION_KEY = 2;
+    private static final Option<Integer, String> VIEW_NEW_REQUESTS_OPTION = Option.optionFactory(VIEW_NEW_REQUESTS_OPTION_KEY, "View new requests");
+    private static final int NEW_REQUEST_OPTION_KEY = 3;
+    private static final Option<Integer, String> NEW_REQUEST_OPTION = Option.optionFactory(NEW_REQUEST_OPTION_KEY, "Create new request");
+    private static final int VIEW_PENDING_REQUESTS_OPTION_KEY = 4;
+    private static final Option<Integer, String> VIEW_PENDING_REQUESTS_OPTION = Option.optionFactory(VIEW_PENDING_REQUESTS_OPTION_KEY, "View pending requests");
+    private static final int VIEW_REQUESTS_OPTION_KEY = 5;
+    private static final Option<Integer, String> VIEW_REQUESTS_OPTION = Option.optionFactory(VIEW_REQUESTS_OPTION_KEY, "Wiew all requests");
+    private static final int NEW_TRANSACTION_OPTION_KEY = 6;
+    private static final Option<Integer, String> NEW_TRANSACTION_OPTION = Option.optionFactory(NEW_TRANSACTION_OPTION_KEY, "New transaction");
+    private static final int VIEW_TRANSACTIONS_OPTION_KEY = 7;
+    private static final Option<Integer, String> VIEW_TRANSACTIONS_OPTION = Option.optionFactory(VIEW_TRANSACTIONS_OPTION_KEY, "Wiew transactions");
 
     private @Autowired BankSession session;
     private @Autowired ConsoleRequestService request;
     private @Autowired ConsoleTransactionService transaction;
 
     @Override
-    protected void setDisplayedMessages() {
+    protected void initMenu() {
         clearMessages();
         addMessage("Welcome, " + session.getActualAccount().getName() + "!");
         setMenuHeader("What do you want to do?");
-        addOption(exitOption);
-        addOption(Option.optionFactory(VIEW_ACCOUNT_DATA_OPTION, "Wiew account data"));
-        addOption(Option.optionFactory(VIEW_NEW_REQUESTS_OPTION, "View new requests"));
-        addOption(Option.optionFactory(NEW_REQUEST_OPTION, "Create new request"));
-        addOption(Option.optionFactory(VIEW_PENDING_REQUESTS_OPTION, "View pending requests"));
-        addOption(Option.optionFactory(VIEW_REQUESTS_OPTION, "Wiew all requests"));
-        addOption(Option.optionFactory(NEW_TRANSACTION_OPTION, "New transaction"));
-        addOption(Option.optionFactory(VIEW_TRANSACTIONS_OPTION, "Wiew transactions"));
+        addOption(EXIT_OPTION);
+        addOption(VIEW_ACCOUNT_DATA_OPTION);
+        addOption(VIEW_NEW_REQUESTS_OPTION);
+        addOption(NEW_REQUEST_OPTION);
+        addOption(VIEW_PENDING_REQUESTS_OPTION);
+        addOption(VIEW_REQUESTS_OPTION);
+        addOption(NEW_TRANSACTION_OPTION);
+        addOption(VIEW_TRANSACTIONS_OPTION);
 
         setMenuFooter("Choose an option:");
     }
@@ -47,25 +54,25 @@ public class AccountMenu extends AbstractMenu<String, Integer, String> {
     @Override
     protected void enterMenu(Option<Integer, String> selection) {
         switch (selection.getKey()) {
-        case VIEW_ACCOUNT_DATA_OPTION:
+        case VIEW_ACCOUNT_DATA_OPTION_KEY:
             System.out.println(session.getActualAccount().getAccountInfo());
             break;
-        case VIEW_NEW_REQUESTS_OPTION:
+        case VIEW_NEW_REQUESTS_OPTION_KEY:
             request.viewNewRequests();
             break;
-        case NEW_REQUEST_OPTION:
+        case NEW_REQUEST_OPTION_KEY:
             request.createNewRequest();
             break;
-        case VIEW_PENDING_REQUESTS_OPTION:
+        case VIEW_PENDING_REQUESTS_OPTION_KEY:
             request.viewPendingRequests();
             break;
-        case VIEW_REQUESTS_OPTION:
+        case VIEW_REQUESTS_OPTION_KEY:
             request.viewAllRequests();
             break;
-        case NEW_TRANSACTION_OPTION:
+        case NEW_TRANSACTION_OPTION_KEY:
             transaction.newTransaction();
             break;
-        case VIEW_TRANSACTIONS_OPTION:
+        case VIEW_TRANSACTIONS_OPTION_KEY:
             transaction.viewTransactions();
             break;
         }
@@ -90,6 +97,6 @@ public class AccountMenu extends AbstractMenu<String, Integer, String> {
 
     @Override
     public void interactUser() {
-        interactUser(exitOption);
+        interactUser(EXIT_OPTION);
     }
 }

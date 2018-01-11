@@ -7,8 +7,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import bank.app.util.DateFormat;
 
@@ -22,7 +20,7 @@ public class Transaction {
     private String addresseeName;
     private double money;
     private @Enumerated(EnumType.STRING) TransactionType type;
-    private @Temporal(TemporalType.TIMESTAMP) Date date;
+    private long date;
 
     public static Transaction depositTransaction(String fromName, double money) {
         Transaction transaction = new Transaction();
@@ -141,7 +139,7 @@ public class Transaction {
     }
 
     public Date getDate() {
-        return date;
+        return new Date(date);
     }
 
     public void setType(TransactionType type) {
@@ -149,7 +147,7 @@ public class Transaction {
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.date = date.getTime();
     }
 
     public String getTransactionInfo() {
@@ -158,7 +156,7 @@ public class Transaction {
                 .append(" - To: ").append(addresseeName)//
                 .append(" - Money: ").append(money)//
                 .append(" - Type: ").append(type)//
-                .append(" - Time: ").append(DateFormat.formatDate(date));
+                .append(" - Time: ").append(DateFormat.formatDate(getDate()));
         return builder.toString();
     }
 }
